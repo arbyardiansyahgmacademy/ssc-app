@@ -1,0 +1,212 @@
+<!--
+  ╔══════════════════════════════════════════════╗
+  ║  PAGE: BLOG                                  ║
+  ║  Blogger Page URL: /p/blog.html             ║
+  ║  SEO, AEO, GEO & ARTICLE SCHEMA ACCELERATED  ║
+  ╚══════════════════════════════════════════════╝
+-->
+<script>window.SSC_PAGE = 'blog';</script>
+
+<!-- AEO & GEO Blog Schema Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Warta & Panduan Administrasi Kesiswaan",
+  "description": "Pusat informasi resmi, panduan pengajuan surat sekolah, beasiswa, dan panduan PKL siswa.",
+  "publisher": {
+    "@type": "EducationalOrganization",
+    "name": "Student Service Center"
+  },
+  "blogPost": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Panduan Lengkap: Cara Cepat Mendapatkan Surat Keterangan Aktif Siswa 2026",
+      "description": "Langkah detail mengajukan Surat Keterangan Aktif online di portal SSC dengan verifikasi QR Code dalam 24 jam.",
+      "datePublished": "2026-09-20",
+      "author": { "@type": "Person", "name": "Admin TU Sekolah" }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Pendaftaran Beasiswa Indonesia Pintar 2026 Dibuka",
+      "description": "Informasi jadwal, kuota, dan tata cara pembuatan surat rekomendasi beasiswa resmi.",
+      "datePublished": "2026-09-18",
+      "author": { "@type": "Person", "name": "Staf Beasiswa" }
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Kerjasama Magang dengan 15 Perusahaan Teknologi Nasional",
+      "description": "Perluasan kesempatan Praktik Kerja Lapangan (PKL) bagi siswa di industri teknologi terkemuka.",
+      "datePublished": "2026-09-15",
+      "author": { "@type": "Person", "name": "Bimbingan Karir" }
+    }
+  ]
+}
+</script>
+
+<div class="container py-5">
+  <header class="text-center mb-5 reveal">
+    <span class="section-eyebrow">Warta &amp; Panduan</span>
+    <h1 class="fw-bold mb-2" style="color:var(--ink-900);font-size:2.2rem;">Berita, Tips &amp; Informasi Kesiswaan</h1>
+    <p style="color:var(--ink-500);max-width:620px;margin:0 auto;font-size:1.05rem;">
+      Kumpulan artikel panduan administrasi, pengumuman resmi Tata Usaha, info beasiswa, dan tips karir/PKL siswa.
+    </p>
+  </header>
+
+  <!-- Filter Pills -->
+  <nav class="blog-category-pills reveal mb-5" aria-label="Kategori Artikel">
+    <button class="faq-pill active" onclick="filterBlogByCategory('ALL',this)">Semua Artikel</button>
+    <button class="faq-pill" onclick="filterBlogByCategory('pengumuman',this)">Pengumuman</button>
+    <button class="faq-pill" onclick="filterBlogByCategory('akademik',this)">Akademik</button>
+    <button class="faq-pill" onclick="filterBlogByCategory('beasiswa',this)">Beasiswa</button>
+    <button class="faq-pill" onclick="filterBlogByCategory('magang',this)">Magang &amp; PKL</button>
+    <button class="faq-pill" onclick="filterBlogByCategory('tips',this)">Tips &amp; Panduan</button>
+  </nav>
+
+  <!-- Featured Hero Article -->
+  <article class="mb-5 reveal">
+    <div class="blog-featured-card" onclick="window.location.href='/p/cara-cepat-mendapatkan-surat-keterangan_01885387324.html'" style="cursor:pointer;">
+      <div class="blog-featured-image"><i class="fa-solid fa-rocket"></i></div>
+      <div class="blog-featured-body">
+        <span class="news-tag mb-3" style="align-self:flex-start;">Artikel Utama</span>
+        <h2 style="font-size:1.45rem;font-weight:800;color:var(--ink-900);line-height:1.35;">
+          <a href="/p/cara-cepat-mendapatkan-surat-keterangan_01885387324.html" style="color:inherit;text-decoration:none;">Panduan Lengkap: Cara Cepat Mendapatkan Surat Keterangan Aktif Siswa 2026</a>
+        </h2>
+        <p style="color:var(--ink-600);line-height:1.65;">
+          Pelajari langkah demi langkah mengajukan Surat Keterangan Aktif melalui portal SSC — mulai dari persiapan berkas Kartu Pelajar hingga mengunduh file PDF resmi yang sudah ber-QR Code valid.
+        </p>
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="blog-author-avatar" style="background:linear-gradient(135deg,var(--orange-500),var(--orange-600));">TU</div>
+          <div>
+            <div style="font-size:.85rem;font-weight:700;color:var(--ink-900);">Drs. H. Mulyadi, M.Pd</div>
+            <div style="font-size:.75rem;color:var(--ink-500);">20 September 2026 · 4 menit baca</div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <a href="/p/cara-cepat-mendapatkan-surat-keterangan_01885387324.html" class="btn btn-navy" onclick="event.stopPropagation();">Baca Panduan Lengkap <i class="fa-solid fa-arrow-right ms-2"></i></a>
+          <a href="/p/layanan.html" class="btn btn-outline-secondary" onclick="event.stopPropagation();">Ajukan Surat Ini</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <div class="row g-4 mb-5">
+    <!-- Grid Articles -->
+    <main class="col-lg-8" aria-label="Daftar Artikel">
+      <div class="row g-4" id="blog-list-container">
+        <!-- Item 1: Surat Keterangan Aktif -->
+        <div class="col-md-6 blog-item reveal delay-1" data-category="akademik">
+          <article class="blog-card h-100 d-flex flex-column" onclick="window.location.href='/p/cara-cepat-mendapatkan-surat-keterangan_01885387324.html'" style="cursor:pointer;">
+            <div class="blog-card-image" style="background:linear-gradient(135deg,#FF8A5B,#F2521A);"><i class="fa-solid fa-file-signature"></i></div>
+            <div class="blog-card-body d-flex flex-column flex-grow-1">
+              <span class="news-tag">Panduan Akademik</span>
+              <h3 class="blog-card-title" style="font-size:1.1rem;"><a href="/p/cara-cepat-mendapatkan-surat-keterangan_01885387324.html" style="color:inherit;text-decoration:none;">Panduan Lengkap: Cara Cepat Mendapatkan Surat Keterangan Aktif Siswa 2026</a></h3>
+              <p class="blog-card-excerpt">Langkah detail mengajukan Surat Keterangan Aktif online di portal SSC dengan verifikasi QR Code dalam 24 jam.</p>
+              <div class="blog-meta-row mt-auto">
+                <div class="blog-author"><div class="blog-author-avatar" style="background:linear-gradient(135deg,#FF8A5B,#F2521A);">TU</div><span>Drs. H. Mulyadi, M.Pd</span></div>
+                <span>20 Sep 2026</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Item 2: Beasiswa -->
+        <div class="col-md-6 blog-item reveal delay-2" data-category="beasiswa">
+          <article class="blog-card h-100 d-flex flex-column" onclick="window.location.href='/p/pendaftaran-beasiswa-siswa-berprestasi-2026.html'" style="cursor:pointer;">
+            <div class="blog-card-image" style="background:linear-gradient(135deg,#34D399,#059669);"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="blog-card-body d-flex flex-column flex-grow-1">
+              <span class="news-tag">Beasiswa</span>
+              <h3 class="blog-card-title" style="font-size:1.1rem;"><a href="/p/pendaftaran-beasiswa-siswa-berprestasi-2026.html" style="color:inherit;text-decoration:none;">Pendaftaran Beasiswa Siswa Berprestasi 2026 Dibuka</a></h3>
+              <p class="blog-card-excerpt">Siswa berprestasi akademik dan non-akademik dapat meminta surat rekomendasi resmi melalui portal SSC.</p>
+              <div class="blog-meta-row mt-auto">
+                <div class="blog-author"><div class="blog-author-avatar" style="background:linear-gradient(135deg,#34D399,#059669);">BK</div><span>Dra. Siti Rahmawati, M.Pd</span></div>
+                <span>18 Sep 2026</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Item 3: Magang / PKL -->
+        <div class="col-md-6 blog-item reveal delay-3" data-category="magang">
+          <article class="blog-card h-100 d-flex flex-column" onclick="window.location.href='/p/panduan-pengajuan-surat-pengantar-pkl-magang.html'" style="cursor:pointer;">
+            <div class="blog-card-image" style="background:linear-gradient(135deg,#A78BFA,#7C3AED);"><i class="fa-solid fa-briefcase"></i></div>
+            <div class="blog-card-body d-flex flex-column flex-grow-1">
+              <span class="news-tag">Magang &amp; PKL</span>
+              <h3 class="blog-card-title" style="font-size:1.1rem;"><a href="/p/panduan-pengajuan-surat-pengantar-pkl-magang.html" style="color:inherit;text-decoration:none;">Panduan Pengajuan Surat Pengantar PKL &amp; Magang Industri</a></h3>
+              <p class="blog-card-excerpt">Langkah mudah mengurus surat pengantar PKL ke 15 mitra industri nasional dengan verifikasi instan.</p>
+              <div class="blog-meta-row mt-auto">
+                <div class="blog-author"><div class="blog-author-avatar" style="background:linear-gradient(135deg,#A78BFA,#7C3AED);">DU</div><span>Hendro Wibowo, S.T</span></div>
+                <span>15 Sep 2026</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Item 4: Tips & Panduan -->
+        <div class="col-md-6 blog-item reveal delay-4" data-category="tips">
+          <article class="blog-card h-100 d-flex flex-column" onclick="window.location.href='/p/layanan.html'" style="cursor:pointer;">
+            <div class="blog-card-image" style="background:linear-gradient(135deg,#60A5FA,#2563EB);"><i class="fa-solid fa-lightbulb"></i></div>
+            <div class="blog-card-body d-flex flex-column flex-grow-1">
+              <span class="news-tag">Tips &amp; Panduan</span>
+              <h3 class="blog-card-title" style="font-size:1.1rem;"><a href="/p/layanan.html" style="color:inherit;text-decoration:none;">5 Kunci Agar Pengajuan Surat Langsung Disetujui</a></h3>
+              <p class="blog-card-excerpt">Tips sederhana memastikan kelengkapan data dan kejelasan dokumen agar bebas dari revisi staf TU.</p>
+              <div class="blog-meta-row mt-auto">
+                <div class="blog-author"><div class="blog-author-avatar" style="background:linear-gradient(135deg,#60A5FA,#2563EB);">TU</div><span>Admin TU</span></div>
+                <span>12 Sep 2026</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </main>
+
+    <!-- Sidebar Info -->
+    <aside class="col-lg-4" aria-label="Sidebar Informasi">
+      <div class="blog-sidebar-card mb-4 reveal delay-1">
+        <h2 class="blog-sidebar-heading" style="font-size:.9rem;"><i class="fa-solid fa-fire"></i> Artikel Terpopuler</h2>
+        <a href="/p/cara-kerja.html" class="blog-popular-item">
+          <div class="blog-popular-thumb" style="background:linear-gradient(135deg,#FF8A5B,#F2521A);"><i class="fa-solid fa-rocket"></i></div>
+          <div><div class="blog-popular-title">Alur Lengkap Mengajukan Surat Sekolah</div><div class="blog-popular-date">20 Sep 2026</div></div>
+        </a>
+        <a href="/p/layanan.html" class="blog-popular-item">
+          <div class="blog-popular-thumb" style="background:linear-gradient(135deg,#34D399,#059669);"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div><div class="blog-popular-title">Syarat Pengajuan Beasiswa Indonesia Pintar</div><div class="blog-popular-date">18 Sep 2026</div></div>
+        </a>
+        <a href="/p/cek-pengajuan.html" class="blog-popular-item">
+          <div class="blog-popular-thumb" style="background:linear-gradient(135deg,#A78BFA,#7C3AED);"><i class="fa-solid fa-briefcase"></i></div>
+          <div><div class="blog-popular-title">Cara Melacak Dokumen dengan Nomor Resi</div><div class="blog-popular-date">15 Sep 2026</div></div>
+        </a>
+      </div>
+
+      <div class="blog-sidebar-card mb-4 reveal delay-2">
+        <h2 class="blog-sidebar-heading" style="font-size:.9rem;"><i class="fa-solid fa-folder-tree"></i> Kategori Topik</h2>
+        <ul class="ssc-footer-links" style="gap:10px;">
+          <li><a href="javascript:void(0)" onclick="filterBlogByCategory('pengumuman')" style="color:var(--ink-600);"><i class="fa-solid fa-chevron-right" style="color:var(--orange-500);"></i> Pengumuman <span class="ms-auto small" style="color:var(--ink-400);">(8)</span></a></li>
+          <li><a href="javascript:void(0)" onclick="filterBlogByCategory('akademik')" style="color:var(--ink-600);"><i class="fa-solid fa-chevron-right" style="color:var(--orange-500);"></i> Akademik <span class="ms-auto small" style="color:var(--ink-400);">(12)</span></a></li>
+          <li><a href="javascript:void(0)" onclick="filterBlogByCategory('beasiswa')" style="color:var(--ink-600);"><i class="fa-solid fa-chevron-right" style="color:var(--orange-500);"></i> Beasiswa <span class="ms-auto small" style="color:var(--ink-400);">(6)</span></a></li>
+          <li><a href="javascript:void(0)" onclick="filterBlogByCategory('magang')" style="color:var(--ink-600);"><i class="fa-solid fa-chevron-right" style="color:var(--orange-500);"></i> Magang &amp; Karir <span class="ms-auto small" style="color:var(--ink-400);">(9)</span></a></li>
+          <li><a href="javascript:void(0)" onclick="filterBlogByCategory('tips')" style="color:var(--ink-600);"><i class="fa-solid fa-chevron-right" style="color:var(--orange-500);"></i> Tips &amp; Panduan <span class="ms-auto small" style="color:var(--ink-400);">(15)</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+function filterBlogByCategory(cat, btn) {
+  if (btn) {
+    document.querySelectorAll(".blog-category-pills .faq-pill").forEach(function(b) { b.classList.remove("active"); });
+    btn.classList.add("active");
+  }
+  var items = document.querySelectorAll("#blog-list-container .blog-item");
+  items.forEach(function(item) {
+    var c = item.getAttribute("data-category") || "";
+    item.style.display = (cat === "ALL" || c === cat) ? "" : "none";
+  });
+}
+window.filterBlogByCategory = filterBlogByCategory;
+if (window.SSC) { window.SSC.filterBlogByCategory = filterBlogByCategory; }
+window.SSC_pageInit = function() {
+  if (window.SSC && SSC.setupReveal) SSC.setupReveal();
+};
+</script>

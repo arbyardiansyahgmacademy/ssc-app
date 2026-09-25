@@ -1,0 +1,346 @@
+<!--
+  ╔══════════════════════════════════════════════╗
+  ║  PAGE: LAYANAN                               ║
+  ║  Blogger Page URL: /p/layanan.html          ║
+  ║  SEO, AEO, GEO & PAGESPEED ACCELERATED       ║
+  ╚══════════════════════════════════════════════╝
+-->
+<script>window.SSC_PAGE = 'layanan';</script>
+
+<!-- AEO & GEO Schema.org Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Katalog Layanan Administrasi Kesiswaan Digital",
+  "description": "Daftar lengkap layanan pengajuan surat administrasi resmi sekolah secara online melalui Student Service Center (SSC).",
+  "itemListElement": [
+    {
+      "@type": "Service",
+      "position": 1,
+      "name": "Surat Keterangan Siswa Aktif",
+      "category": "Administrasi Siswa",
+      "description": "Menerangkan bahwa siswa bersangkutan aktif menempuh pendidikan pada tahun ajaran berjalan untuk keperluan tunjangan orang tua, beasiswa, perbankan, atau instansi resmi.",
+      "provider": { "@type": "EducationalOrganization", "name": "Student Service Center" },
+      "serviceType": "Surat Keterangan",
+      "termsOfService": "Scan Kartu Pelajar & Kartu Keluarga",
+      "timeRequired": "P1D"
+    },
+    {
+      "@type": "Service",
+      "position": 2,
+      "name": "Surat Pengantar PKL / Magang",
+      "category": "Praktik Kerja Industri",
+      "description": "Surat permohonan resmi penempatan magang ke instansi, industri, atau Dunia Usaha/Dunia Industri (DU/DI).",
+      "provider": { "@type": "EducationalOrganization", "name": "Student Service Center" },
+      "serviceType": "Surat Pengantar",
+      "termsOfService": "Data Perusahaan, Alamat, PIC & Periode Magang",
+      "timeRequired": "P2D"
+    },
+    {
+      "@type": "Service",
+      "position": 3,
+      "name": "Surat Rekomendasi Beasiswa",
+      "category": "Rekomendasi & Khusus",
+      "description": "Rekomendasi resmi pihak sekolah untuk pengajuan beasiswa prestasi akademik maupun non-akademik ke pihak sponsor atau kementerian.",
+      "provider": { "@type": "EducationalOrganization", "name": "Student Service Center" },
+      "serviceType": "Rekomendasi Beasiswa",
+      "termsOfService": "Bukti Prestasi / Formulir Beasiswa Terkait",
+      "timeRequired": "P2D"
+    },
+    {
+      "@type": "Service",
+      "position": 4,
+      "name": "Permohonan Legalisir Dokumen",
+      "category": "Akademik",
+      "description": "Pengesahan salinan rapor, ijazah, atau sertifikat kompetensi siswa secara legal dan diakui kementerian.",
+      "provider": { "@type": "EducationalOrganization", "name": "Student Service Center" },
+      "serviceType": "Legalisir Dokumen",
+      "termsOfService": "Scan Dokumen Asli yang akan dilegalisir",
+      "timeRequired": "P2D"
+    },
+    {
+      "@type": "Service",
+      "position": 5,
+      "name": "Surat Dispensasi / Izin Khusus",
+      "category": "Administrasi Siswa",
+      "description": "Dispensasi meninggalkan Kegiatan Belajar Mengajar (KBM) untuk mengikuti perlombaan resmi, kejuaraan, atau penugasan sekolah.",
+      "provider": { "@type": "EducationalOrganization", "name": "Student Service Center" },
+      "serviceType": "Surat Izin Dispensasi",
+      "termsOfService": "Surat Undangan Lomba / Penugasan Resmi",
+      "timeRequired": "P1D"
+    }
+  ]
+}
+</script>
+
+<div class="container py-5">
+  <!-- Semantic Header -->
+  <header class="text-center mb-5 reveal">
+    <span class="section-eyebrow">Katalog Layanan Resmi</span>
+    <h1 class="fw-bold mb-2" style="color:var(--ink-900);font-size:2.2rem;">Katalog Layanan Administrasi Kesiswaan</h1>
+    <p style="color:var(--ink-500);max-width:620px;margin:0 auto;font-size:1.05rem;">
+      Pilih jenis surat dan dokumen kesiswaan yang Anda butuhkan. Seluruh pengajuan diproses digital, ber-QR Code otentik, dan dapat dilacak real-time.
+    </p>
+  </header>
+
+  <!-- Category Quick Cards -->
+  <section class="row g-3 mb-5 reveal" aria-label="Kategori Layanan">
+    <div class="col-6 col-md-3">
+      <div class="category-quick-card" onclick="filterByCategory('Administrasi')" role="button" tabindex="0">
+        <div class="category-quick-icon svc-orange"><i class="fa-solid fa-file-lines"></i></div>
+        <div class="category-quick-name">Administrasi</div>
+        <div class="category-quick-count">2 Layanan</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="category-quick-card" onclick="filterByCategory('Magang')" role="button" tabindex="0">
+        <div class="category-quick-icon svc-green"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="category-quick-name">Magang / PKL</div>
+        <div class="category-quick-count">1 Layanan</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="category-quick-card" onclick="filterByCategory('Akademik')" role="button" tabindex="0">
+        <div class="category-quick-icon svc-purple"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="category-quick-name">Akademik</div>
+        <div class="category-quick-count">1 Layanan</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="category-quick-card" onclick="filterByCategory('Rekomendasi')" role="button" tabindex="0">
+        <div class="category-quick-icon svc-yellow"><i class="fa-solid fa-award"></i></div>
+        <div class="category-quick-name">Rekomendasi</div>
+        <div class="category-quick-count">1 Layanan</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter & Search Controls -->
+  <section class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3 reveal">
+    <h2 class="fw-bold mb-0" style="color:var(--ink-900);font-size:1.4rem;">Semua Layanan Tersedia</h2>
+    <div class="d-flex gap-2 flex-wrap">
+      <input type="text" id="service-search-input" class="form-control rounded-3" placeholder="Cari nama surat atau kata kunci..." oninput="renderServices()" style="min-width:240px;" aria-label="Cari Layanan">
+      <select id="service-category-filter" class="form-select rounded-3" onchange="renderServices()" style="min-width:200px;" aria-label="Filter Kategori">
+        <option value="ALL">Semua Kategori</option>
+        <option value="Administrasi">Administrasi Siswa</option>
+        <option value="Magang">Praktik Kerja / Magang</option>
+        <option value="Akademik">Akademik &amp; Legalisir</option>
+        <option value="Rekomendasi">Rekomendasi &amp; Khusus</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Pre-rendered Services List (Zero Delay & 100 PageSpeed) -->
+  <section class="row g-4 mb-5" id="services-list" aria-label="Daftar Layanan Siswa">
+    <!-- Card 1 -->
+    <article class="col-md-6 col-lg-4 reveal" data-category="Administrasi">
+      <div class="card-modern p-4 h-100 d-flex flex-column">
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <div class="service-icon-badge svc-orange"><i class="fa-solid fa-file-lines"></i></div>
+          <div>
+            <h3 class="fw-bold mb-1" style="color:var(--ink-900);font-size:1.1rem;">Surat Keterangan Siswa Aktif</h3>
+            <span class="status-badge" style="background:var(--orange-100);color:var(--orange-700);font-size:.68rem;">Administrasi</span>
+          </div>
+        </div>
+        <p class="small mb-3" style="color:var(--ink-500);line-height:1.6;">
+          Menerangkan bahwa siswa bersangkutan aktif menempuh pendidikan pada tahun ajaran berjalan untuk keperluan tunjangan orang tua, BPJS, atau perbankan.
+        </p>
+        <div class="p-2 rounded-2 mb-3 small" style="background:var(--ink-50);color:var(--ink-600);">
+          <i class="fa-solid fa-paperclip me-1" style="color:var(--orange-500);"></i><strong>Syarat:</strong> Scan Kartu Pelajar &amp; Kartu Keluarga
+        </div>
+        <div class="d-flex align-items-center justify-content-between mt-auto pt-2">
+          <small style="color:var(--ink-500);"><i class="fa-regular fa-clock me-1"></i>1 hari kerja</small>
+          <a href="/p/login.html" class="btn btn-navy btn-sm px-3">Ajukan <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card 2 -->
+    <article class="col-md-6 col-lg-4 reveal delay-1" data-category="Magang">
+      <div class="card-modern p-4 h-100 d-flex flex-column">
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <div class="service-icon-badge svc-green"><i class="fa-solid fa-briefcase"></i></div>
+          <div>
+            <h3 class="fw-bold mb-1" style="color:var(--ink-900);font-size:1.1rem;">Surat Pengantar PKL / Magang</h3>
+            <span class="status-badge" style="background:var(--orange-100);color:var(--orange-700);font-size:.68rem;">Magang</span>
+          </div>
+        </div>
+        <p class="small mb-3" style="color:var(--ink-500);line-height:1.6;">
+          Surat permohonan resmi penempatan magang ke instansi pemerintah, BUMN, industri, atau Dunia Usaha/Dunia Industri (DU/DI).
+        </p>
+        <div class="p-2 rounded-2 mb-3 small" style="background:var(--ink-50);color:var(--ink-600);">
+          <i class="fa-solid fa-paperclip me-1" style="color:var(--orange-500);"></i><strong>Syarat:</strong> Nama Perusahaan, Alamat, PIC &amp; Periode
+        </div>
+        <div class="d-flex align-items-center justify-content-between mt-auto pt-2">
+          <small style="color:var(--ink-500);"><i class="fa-regular fa-clock me-1"></i>2 hari kerja</small>
+          <a href="/p/login.html" class="btn btn-navy btn-sm px-3">Ajukan <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card 3 -->
+    <article class="col-md-6 col-lg-4 reveal delay-2" data-category="Rekomendasi">
+      <div class="card-modern p-4 h-100 d-flex flex-column">
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <div class="service-icon-badge svc-yellow"><i class="fa-solid fa-award"></i></div>
+          <div>
+            <h3 class="fw-bold mb-1" style="color:var(--ink-900);font-size:1.1rem;">Surat Rekomendasi Beasiswa</h3>
+            <span class="status-badge" style="background:var(--orange-100);color:var(--orange-700);font-size:.68rem;">Rekomendasi</span>
+          </div>
+        </div>
+        <p class="small mb-3" style="color:var(--ink-500);line-height:1.6;">
+          Rekomendasi resmi pihak sekolah untuk pengajuan beasiswa prestasi akademik maupun non-akademik tingkat kota, provinsi, hingga nasional.
+        </p>
+        <div class="p-2 rounded-2 mb-3 small" style="background:var(--ink-50);color:var(--ink-600);">
+          <i class="fa-solid fa-paperclip me-1" style="color:var(--orange-500);"></i><strong>Syarat:</strong> Bukti Prestasi / Formulir Beasiswa
+        </div>
+        <div class="d-flex align-items-center justify-content-between mt-auto pt-2">
+          <small style="color:var(--ink-500);"><i class="fa-regular fa-clock me-1"></i>2 hari kerja</small>
+          <a href="/p/login.html" class="btn btn-navy btn-sm px-3">Ajukan <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card 4 -->
+    <article class="col-md-6 col-lg-4 reveal delay-3" data-category="Akademik">
+      <div class="card-modern p-4 h-100 d-flex flex-column">
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <div class="service-icon-badge svc-purple"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div>
+            <h3 class="fw-bold mb-1" style="color:var(--ink-900);font-size:1.1rem;">Permohonan Legalisir Dokumen</h3>
+            <span class="status-badge" style="background:var(--orange-100);color:var(--orange-700);font-size:.68rem;">Akademik</span>
+          </div>
+        </div>
+        <p class="small mb-3" style="color:var(--ink-500);line-height:1.6;">
+          Pengesahan salinan rapor semester, ijazah kelulusan, atau sertifikat uji kompetensi keahlian siswa dengan legalisasi stempel resmi.
+        </p>
+        <div class="p-2 rounded-2 mb-3 small" style="background:var(--ink-50);color:var(--ink-600);">
+          <i class="fa-solid fa-paperclip me-1" style="color:var(--orange-500);"></i><strong>Syarat:</strong> Scan Dokumen Asli yang akan dilegalisir
+        </div>
+        <div class="d-flex align-items-center justify-content-between mt-auto pt-2">
+          <small style="color:var(--ink-500);"><i class="fa-regular fa-clock me-1"></i>1-2 hari kerja</small>
+          <a href="/p/login.html" class="btn btn-navy btn-sm px-3">Ajukan <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card 5 -->
+    <article class="col-md-6 col-lg-4 reveal delay-4" data-category="Administrasi">
+      <div class="card-modern p-4 h-100 d-flex flex-column">
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <div class="service-icon-badge svc-orange"><i class="fa-solid fa-id-badge"></i></div>
+          <div>
+            <h3 class="fw-bold mb-1" style="color:var(--ink-900);font-size:1.1rem;">Surat Dispensasi / Izin Khusus</h3>
+            <span class="status-badge" style="background:var(--orange-100);color:var(--orange-700);font-size:.68rem;">Administrasi</span>
+          </div>
+        </div>
+        <p class="small mb-3" style="color:var(--ink-500);line-height:1.6;">
+          Surat izin resmi meninggalkan KBM untuk mengikuti kejuaraan olahraga, kompetisi sains, festival seni, atau penugasan resmi dari pihak sekolah.
+        </p>
+        <div class="p-2 rounded-2 mb-3 small" style="background:var(--ink-50);color:var(--ink-600);">
+          <i class="fa-solid fa-paperclip me-1" style="color:var(--orange-500);"></i><strong>Syarat:</strong> Surat Undangan Lomba / Penugasan
+        </div>
+        <div class="d-flex align-items-center justify-content-between mt-auto pt-2">
+          <small style="color:var(--ink-500);"><i class="fa-regular fa-clock me-1"></i>1 hari kerja</small>
+          <a href="/p/login.html" class="btn btn-navy btn-sm px-3">Ajukan <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- SLA & Standar Mutu (AEO / GEO Content) -->
+  <section class="info-banner reveal mb-5 perf-deferred" aria-labelledby="sla-heading">
+    <div class="info-banner-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+    <div>
+      <h2 id="sla-heading" class="fw-bold mb-2" style="color:var(--ink-900);font-size:1.3rem;">Standar Waktu Penyelesaian Layanan (Service Level Agreement)</h2>
+      <p class="mb-3" style="color:var(--ink-600);font-size:.92rem;line-height:1.6;">
+        Kami berkomitmen memproses setiap pengajuan dokumen secara tepat waktu dan transparan dengan standar operasional prosedur (SOP) berikut:
+      </p>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-3">
+          <div class="p-3 rounded-3 bg-white border" style="border-color:var(--ink-100)!important;">
+            <strong class="d-block" style="color:var(--ink-900);font-size:.88rem;">Surat Keterangan Aktif</strong>
+            <span class="badge mt-2" style="background:var(--orange-500);color:#fff;">1 Hari Kerja (Maks 24 Jam)</span>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="p-3 rounded-3 bg-white border" style="border-color:var(--ink-100)!important;">
+            <strong class="d-block" style="color:var(--ink-900);font-size:.88rem;">Surat Pengantar PKL</strong>
+            <span class="badge mt-2" style="background:var(--orange-500);color:#fff;">2 Hari Kerja</span>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="p-3 rounded-3 bg-white border" style="border-color:var(--ink-100)!important;">
+            <strong class="d-block" style="color:var(--ink-900);font-size:.88rem;">Rekomendasi Beasiswa</strong>
+            <span class="badge mt-2" style="background:var(--orange-500);color:#fff;">2 Hari Kerja</span>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="p-3 rounded-3 bg-white border" style="border-color:var(--ink-100)!important;">
+            <strong class="d-block" style="color:var(--ink-900);font-size:.88rem;">Legalisir Dokumen</strong>
+            <span class="badge mt-2" style="background:var(--orange-500);color:#fff;">1-2 Hari Kerja</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Hubungi Kami -->
+  <section class="cta-section reveal reveal-scale perf-deferred">
+    <div class="cta-inner">
+      <h2 style="font-size:1.8rem;">Butuh Layanan Administrasi Khusus?</h2>
+      <p style="font-size:1rem;max-width:540px;margin:0 auto 1.5rem;">
+        Hubungi staf Tata Usaha kami untuk konsultasi permohonan surat khusus yang tidak tercantum dalam katalog.
+      </p>
+      <div class="d-flex flex-wrap gap-3 justify-content-center">
+        <a href="/p/kontak.html" class="btn btn-white px-4 py-3"><i class="fa-solid fa-headset me-2"></i> Hubungi Kami</a>
+        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener" class="btn btn-outline-light px-4 py-3" style="border-radius:12px;font-weight:600;"><i class="fa-brands fa-whatsapp me-2"></i> Chat WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Optimized Instant Filter Script -->
+<script>
+function filterByCategory(cat) {
+  var el = document.getElementById("service-category-filter");
+  if (el) el.value = cat;
+  renderServices();
+}
+
+function renderServices() {
+  var searchVal = (document.getElementById("service-search-input")||{value:""}).value.toLowerCase().trim();
+  var catVal = (document.getElementById("service-category-filter")||{value:"ALL"}).value;
+  var cards = document.querySelectorAll("#services-list article");
+  var visibleCount = 0;
+
+  cards.forEach(function(card) {
+    var cCategory = card.getAttribute("data-category") || "";
+    var cText = card.innerText.toLowerCase();
+    var matchCat = (catVal === "ALL" || cCategory === catVal);
+    var matchSearch = (!searchVal || cText.includes(searchVal));
+
+    if (matchCat && matchSearch) {
+      card.style.display = "";
+      visibleCount++;
+    } else {
+      card.style.display = "none";
+    }
+  });
+
+  var emptyBox = document.getElementById("services-empty-msg");
+  if (!emptyBox) {
+    emptyBox = document.createElement("div");
+    emptyBox.id = "services-empty-msg";
+    emptyBox.className = "col-12 text-center py-5";
+    emptyBox.innerHTML = '<p class="lead" style="color:var(--ink-500);"><i class="fa-solid fa-magnifying-glass me-2"></i>Tidak ada layanan yang sesuai pencarian.</p>';
+    document.getElementById("services-list").appendChild(emptyBox);
+  }
+  emptyBox.style.display = (visibleCount === 0) ? "block" : "none";
+}
+
+window.SSC_pageInit = function() {
+  if (window.SSC && SSC.setupReveal) SSC.setupReveal();
+};
+</script>

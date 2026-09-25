@@ -1,0 +1,652 @@
+<style>
+/* Clean Fullscreen View for Admin */
+#public-navbar, #ssc-footer, .ssc-footer, #floatingStack, .floating-stack, .floating-top, #backToTop, .floating-whatsapp-btn {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+#main-content, #blogger-ssc-root {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+#adminDashboard .bottom-nav-item.active {
+  color: #7C3AED !important;
+  background: rgba(139, 92, 246, 0.12) !important;
+}
+.modal-preview-box {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35);
+  overflow: hidden;
+  animation: modalFadeIn .2s ease-out;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+@media (max-width: 576px) {
+  #previewDocModalBackdrop {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .modal-preview-box {
+    max-height: 92vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    margin-top: auto !important;
+  }
+}
+@media (max-width: 767.98px) {
+  #adminDashboard .main-viewport > header.sticky-top {
+    padding: 10px 16px !important;
+  }
+  #admin-page-title {
+    font-size: 1rem !important;
+  }
+  #admin-page-sub {
+    display: none !important;
+  }
+  .table-responsive {
+    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+</style>
+<!-- PAGE: DASHBOARD ADMIN — /p/admin -->
+<script>window.SSC_PAGE = 'admin';</script>
+<div class="dashboard-wrapper" id="adminDashboard">
+  <!-- SIDEBAR -->
+  <aside id="appSidebar" class="app-sidebar position-relative">
+    <!-- Mobile Drawer Close Button -->
+    <button class="btn btn-sm btn-light d-lg-none position-absolute top-0 end-0 m-3 rounded-circle shadow-sm" onclick="SSC.closeSidebar()" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;z-index:10;" aria-label="Tutup Menu">
+      <i class="fa-solid fa-xmark fs-6"></i>
+    </button>
+    <div class="p-4 pb-2">
+      <div class="d-flex align-items-center gap-2 mb-4">
+        <div class="text-white rounded-3 p-2 d-flex align-items-center justify-content-center" style="width:38px;height:38px;background:linear-gradient(135deg,#8B5CF6,#6D28D9);flex-shrink:0;">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div><span class="fw-bold d-block lh-1 small" style="color:var(--ink-900);">ADMIN TU</span><span style="font-size:.65rem;letter-spacing:1.5px;color:var(--purple);font-weight:700;">BACK OFFICE</span></div>
+      </div>
+      <div class="p-3 rounded-3 mb-4" style="background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(139,92,246,.05));border:1px solid rgba(139,92,246,.2);">
+        <div class="d-flex align-items-center gap-3">
+          <div class="service-icon-badge svc-purple" style="width:42px;height:42px;font-size:1rem;flex-shrink:0;" id="admin-sidebar-avatar">MU</div>
+          <div><div class="fw-bold small" id="admin-sidebar-name" style="color:var(--ink-900);">Drs. H. Mulyadi, M.Pd</div><div style="font-size:.72rem;color:var(--ink-500);">Staff Tata Usaha</div></div>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-grow-1 overflow-auto px-2 pb-3">
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-400);padding:8px 16px 6px;">Menu Utama</div>
+      <a class="nav-link active" href="javascript:void(0)" id="nav-a-home" onclick="SSC_loadAdminPage('home')"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+      <a class="nav-link" href="javascript:void(0)" id="nav-a-antrian" onclick="SSC_loadAdminPage('antrian')"><i class="fa-solid fa-inbox"></i> Antrian Masuk</a>
+      <a class="nav-link" href="javascript:void(0)" id="nav-a-semua" onclick="SSC_loadAdminPage('semua')"><i class="fa-solid fa-list-check"></i> Semua Pengajuan</a>
+      <a class="nav-link" href="javascript:void(0)" id="nav-a-siswa" onclick="SSC_loadAdminPage('siswa')"><i class="fa-solid fa-users"></i> Data Siswa</a>
+      <a class="nav-link" href="javascript:void(0)" id="nav-a-log" onclick="SSC_loadAdminPage('log')"><i class="fa-solid fa-scroll"></i> Log Aktivitas</a>
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-400);padding:12px 16px 6px;">Sistem</div>
+      <a class="nav-link" href="javascript:void(0)" onclick="SSC.handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <div class="main-viewport">
+    <header class="sticky-top d-flex align-items-center gap-2 gap-sm-3">
+      <button class="btn p-2 d-lg-none border-0 shadow-none rounded-3" onclick="SSC.toggleSidebar()" aria-label="Buka Menu">
+        <i class="fa-solid fa-bars fs-5" style="color:var(--ink-700);"></i>
+      </button>
+      <div class="overflow-hidden">
+        <h6 class="fw-bold mb-0 text-truncate" id="admin-page-title" style="color:var(--ink-900);">Dashboard Admin</h6>
+        <small id="admin-page-sub" class="d-none d-sm-block text-truncate" style="color:var(--ink-500);">Back Office — Tata Usaha</small>
+      </div>
+      <div class="ms-auto d-flex align-items-center gap-2 flex-shrink-0">
+        <button class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 gap-sm-2 rounded-3 py-1 px-2 px-sm-3" id="btn-admin-sync" onclick="refreshAdminData()" title="Sinkronkan dengan Google Sheets">
+          <i class="fa-solid fa-rotate" id="admin-sync-icon"></i> <span class="d-none d-sm-inline" style="font-size:.78rem;">Sinkronkan Data</span>
+        </button>
+        <a href="/" class="btn btn-sm btn-outline-navy d-none d-md-inline-flex align-items-center gap-1"><i class="fa-solid fa-globe"></i> Lihat Web</a>
+        <button class="btn btn-sm btn-danger d-inline-flex align-items-center gap-1 gap-sm-2 rounded-3 py-1 px-2 px-sm-3" onclick="SSC.handleLogout()" style="font-size:.82rem;">
+          <i class="fa-solid fa-right-from-bracket"></i> <span class="d-none d-sm-inline">Keluar</span>
+        </button>
+      </div>
+    </header>
+    <div class="p-3 p-md-4 flex-grow-1" id="admin-content-area">
+      <!-- Mounted dynamically -->
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV MOBILE -->
+  <nav class="bottom-nav">
+    <a href="javascript:void(0)" class="bottom-nav-item active" onclick="SSC_loadAdminPage('home')" id="bn-a-home"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a>
+    <a href="javascript:void(0)" class="bottom-nav-item" onclick="SSC_loadAdminPage('antrian')" id="bn-a-antrian"><i class="fa-solid fa-inbox"></i><span>Antrian</span></a>
+    <a href="javascript:void(0)" class="bottom-nav-item" onclick="SSC_loadAdminPage('semua')" id="bn-a-semua"><i class="fa-solid fa-list"></i><span>Semua</span></a>
+    <a href="javascript:void(0)" class="bottom-nav-item" onclick="SSC_loadAdminPage('siswa')" id="bn-a-siswa"><i class="fa-solid fa-users"></i><span>Siswa</span></a>
+  </nav>
+</div>
+
+<!-- ATTACHMENT PREVIEW MODAL -->
+<div id="previewDocModalBackdrop" onclick="if(event.target===this) closeDocModal();" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,0.75);z-index:999999;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div class="modal-preview-box">
+    <div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
+      <div class="d-flex align-items-center gap-2 overflow-hidden">
+        <div class="service-icon-badge svc-purple" style="width:34px;height:34px;font-size:.85rem;flex-shrink:0;">
+          <i class="fa-solid fa-paperclip"></i>
+        </div>
+        <div class="overflow-hidden">
+          <h6 class="fw-bold mb-0 text-truncate" id="previewModalTitle" style="color:var(--ink-900);">Berkas Unggahan Siswa</h6>
+          <small class="text-muted" style="font-size:.72rem;">Verifikasi Berkas Pendukung Siswa</small>
+        </div>
+      </div>
+      <button type="button" class="btn-close shadow-none" onclick="closeDocModal()"></button>
+    </div>
+    <div class="p-3 text-center overflow-auto flex-grow-1" id="previewModalBody" style="background:#f8fafc;min-height:280px;display:flex;align-items:center;justify-content:center;">
+      <!-- Image or Document preview rendered here -->
+    </div>
+    <div class="p-3 border-top d-flex justify-content-between align-items-center bg-white gap-2">
+      <a href="#" target="_blank" id="previewModalExternalLink" class="btn btn-sm btn-outline-primary">
+        <i class="fa-solid fa-up-right-from-square me-1"></i> Buka Ukuran Penuh
+      </a>
+      <button type="button" class="btn btn-sm btn-secondary px-3" onclick="closeDocModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   ADMIN BACK-OFFICE ENGINE (FULL SYNC + ATTACHMENT VERIFICATION)
+================================================================ */
+(function() {
+  var session, db, config;
+
+  function safeBadgeClass(status) {
+    if (window.SSC && typeof SSC.statusBadgeClass === 'function') {
+      return SSC.statusBadgeClass(status);
+    }
+    var s = String(status || '').toUpperCase();
+    if (s === 'SELESAI') return 'badge-selesai';
+    if (s === 'DISETUJUI') return 'badge-disetujui';
+    if (s === 'DIPROSES') return 'badge-diproses';
+    if (s === 'DIVERIFIKASI') return 'badge-diverifikasi';
+    if (s === 'DITOLAK') return 'badge-ditolak';
+    return 'badge-menunggu';
+  }
+
+  function ensureDatabase() {
+    if (window.SSC && SSC.db) {
+      db = SSC.db;
+    } else {
+      try {
+        var stored = localStorage.getItem("ssc_dummy_database");
+        if (stored) db = JSON.parse(stored);
+      } catch(e) {}
+      if (!db) db = {};
+    }
+    if (!Array.isArray(db.submissions)) {
+      db.submissions = [
+        { submission_id: 'REQ-2026-001', request_id: 'REQ-2026-001', student_id: 'STD-2026-001', student_name: 'Arbi Pratama', student_class: 'XII RPL 1', service_id: 'SRV-AKTIF', service_name: 'Surat Keterangan Siswa Aktif', submission_date: '2026-09-20 08:30', status: 'SELESAI', notes: 'Untuk tunjangan BPJS orang tua', attachment_url: '', document_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', admin_note: 'Dokumen telah disahkan dan ditandatangani digital.' },
+        { submission_id: 'REQ-2026-002', request_id: 'REQ-2026-002', student_id: 'STD-2026-001', student_name: 'Arbi Pratama', student_class: 'XII RPL 1', service_id: 'SRV-MAGANG', service_name: 'Surat Pengantar PKL / Magang', submission_date: '2026-09-21 10:15', status: 'DIPROSES', notes: 'Penempatan di PT Telkom Indonesia', attachment_url: '', document_url: '', admin_note: 'Menunggu paraf Kepala Program Keahlian.' },
+        { submission_id: 'REQ-2026-003', request_id: 'REQ-2026-003', student_id: 'STD-2026-002', student_name: 'Siti Rahmawati', student_class: 'XII RPL 1', service_id: 'SRV-REKOM', service_name: 'Surat Rekomendasi Beasiswa', submission_date: '2026-09-22 14:00', status: 'MENUNGGU', notes: 'Pengajuan Beasiswa Prestasi Pemprov', attachment_url: '', document_url: '', admin_note: '' },
+        { submission_id: 'REQ-2026-004', request_id: 'REQ-2026-004', student_id: 'STD-2026-003', student_name: 'Budi Santoso', student_class: 'XI TKJ 2', service_id: 'SRV-LEGALISIR', service_name: 'Permohonan Legalisir Dokumen', submission_date: '2026-09-23 09:15', status: 'DIVERIFIKASI', notes: 'Legalisir rapor semester 1-4', attachment_url: '', document_url: '', admin_note: 'Berkas fotokopi telah diterima staf TU.' }
+      ];
+    }
+    if (!Array.isArray(db.requests)) {
+      db.requests = db.submissions;
+    }
+    if (!Array.isArray(db.students)) {
+      db.students = [
+        { student_id: 'STD-2026-001', nis: '2122101', nisn: '0051289110', name: 'Arbi Pratama', class: 'XII Rekayasa Perangkat Lunak 1', major: 'RPL', email: 'arbi.pratama@student.sch.id', phone: '081234567890', status: 'Aktif' },
+        { student_id: 'STD-2026-002', nis: '2122102', nisn: '0051289111', name: 'Siti Rahmawati', class: 'XII Rekayasa Perangkat Lunak 1', major: 'RPL', email: 'siti.rahma@student.sch.id', phone: '081298765432', status: 'Aktif' },
+        { student_id: 'STD-2026-003', nis: '2122201', nisn: '0051289112', name: 'Budi Santoso', class: 'XI Teknik Komputer & Jaringan 2', major: 'TKJ', email: 'budi.santoso@student.sch.id', phone: '085678123456', status: 'Aktif' }
+      ];
+    }
+    if (!Array.isArray(db.activity_logs)) {
+      db.activity_logs = [
+        { timestamp: '2026-09-23 10:15', user: 'Admin TU', role: 'Admin', action: 'Verifikasi Berkas', description: 'Memverifikasi berkas REQ-2026-004' },
+        { timestamp: '2026-09-22 14:00', user: 'Siti Rahmawati', role: 'Siswa', action: 'Pengajuan Baru', description: 'Mengajukan Rekomendasi Beasiswa' },
+        { timestamp: '2026-09-20 14:30', user: 'Admin TU', role: 'Admin', action: 'Terbitkan Dokumen', description: 'Menerbitkan PDF Surat Aktif REQ-2026-001' }
+      ];
+    }
+    if (!Array.isArray(db.documents)) {
+      db.documents = [
+        { document_id: 'DOC-01', submission_id: 'REQ-2026-001', document_name: 'Surat Keterangan Aktif - Arbi Pratama', service_name: 'Surat Keterangan Siswa Aktif', pdf_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', created_at: '2026-09-20 14:00' }
+      ];
+    }
+  }
+
+  function persistDatabase() {
+    if (window.SSC && typeof SSC.saveDatabase === 'function') {
+      SSC.saveDatabase();
+    } else {
+      try {
+        localStorage.setItem("ssc_dummy_database", JSON.stringify(db));
+      } catch(e) {}
+    }
+    try {
+      window.dispatchEvent(new CustomEvent('ssc_db_updated', { detail: db }));
+    } catch(e) {}
+  }
+
+  window.previewDocModal = function(url, title) {
+    var rawUrl = decodeURIComponent(url || '');
+    var rawTitle = decodeURIComponent(title || 'Berkas Siswa');
+    if (!rawUrl) {
+      if (window.SSC && SSC.showToast) SSC.showToast('Berkas pendukung tidak ditemukan.', 'warning');
+      return;
+    }
+    var modal = document.getElementById('previewDocModalBackdrop');
+    var titleEl = document.getElementById('previewModalTitle');
+    var bodyEl = document.getElementById('previewModalBody');
+    var linkEl = document.getElementById('previewModalExternalLink');
+    if (!modal || !bodyEl) return;
+
+    if (titleEl) titleEl.textContent = rawTitle;
+    if (linkEl) linkEl.href = rawUrl;
+
+    var isImg = rawUrl.indexOf('data:image/') === 0 || rawUrl.match(/\.(jpeg|jpg|png|gif|webp)(\?.*)?$/i);
+    if (isImg) {
+      bodyEl.innerHTML = '<div class="text-center p-2"><img src="' + rawUrl + '" alt="' + rawTitle + '" style="max-width:100%;max-height:65vh;object-fit:contain;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);"></div>';
+    } else {
+      bodyEl.innerHTML = '<div class="w-100 text-center py-4">'+
+        '<i class="fa-solid fa-file-pdf fa-4x text-danger mb-3"></i>'+
+        '<h6 class="fw-bold mb-2">Dokumen Berkas Siswa</h6>'+
+        '<p class="small text-muted mb-4">Berkas PDF pendukung yang diunggah siswa.</p>'+
+        '<a href="' + rawUrl + '" target="_blank" class="btn btn-navy"><i class="fa-solid fa-arrow-up-right-from-square me-2"></i> Buka Dokumen di Tab Baru</a>'+
+        '</div>';
+    }
+    modal.style.display = 'flex';
+  };
+
+  window.closeDocModal = function() {
+    var modal = document.getElementById('previewDocModalBackdrop');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.refreshAdminData = function() {
+    var icon = document.getElementById('admin-sync-icon');
+    if (icon) icon.classList.add('fa-spin');
+    if (window.SSC && typeof SSC.callGAS === 'function') {
+      SSC.callGAS("syncAll").then(function(res) {
+        if (icon) icon.classList.remove('fa-spin');
+        if (res && res.status === "success" && res.data) {
+          if (Array.isArray(res.data.submissions)) db.submissions = res.data.submissions;
+          if (Array.isArray(res.data.activity_logs)) db.activity_logs = res.data.activity_logs;
+          if (Array.isArray(res.data.students)) db.students = res.data.students;
+          if (Array.isArray(res.data.documents)) db.documents = res.data.documents;
+          persistDatabase();
+          SSC_loadAdminPage(getCurrentActiveAdminPage());
+          if (window.SSC && SSC.showToast) SSC.showToast('Data berhasil disinkronkan dengan Google Sheets!', 'success');
+        }
+      }).catch(function(e) {
+        if (icon) icon.classList.remove('fa-spin');
+        ensureDatabase();
+        SSC_loadAdminPage(getCurrentActiveAdminPage());
+      });
+    } else {
+      setTimeout(function(){
+        if (icon) icon.classList.remove('fa-spin');
+        ensureDatabase();
+        SSC_loadAdminPage(getCurrentActiveAdminPage());
+      }, 350);
+    }
+  };
+
+  function getCurrentActiveAdminPage() {
+    var activeNav = document.querySelector('#adminDashboard .nav-link.active') || document.querySelector('.bottom-nav-item.active');
+    if (!activeNav) return 'home';
+    if (activeNav.id.indexOf('nav-a-') === 0) return activeNav.id.replace('nav-a-', '');
+    if (activeNav.id.indexOf('bn-a-') === 0) return activeNav.id.replace('bn-a-', '');
+    return 'home';
+  }
+
+  // Cross-Tab Real-Time Sync Listener
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'ssc_dummy_database' && e.newValue) {
+      try {
+        var fresh = JSON.parse(e.newValue);
+        if (fresh && Array.isArray(fresh.submissions)) {
+          db = fresh;
+          if (window.SSC) SSC.db = db;
+          SSC_loadAdminPage(getCurrentActiveAdminPage());
+        }
+      } catch(err){}
+    }
+  });
+
+  window.addEventListener('ssc_db_updated', function(e) {
+    if (e.detail && Array.isArray(e.detail.submissions)) {
+      db = e.detail;
+      SSC_loadAdminPage(getCurrentActiveAdminPage());
+    }
+  });
+
+  window.SSC_pageInit = function(s, d, c) {
+    document.body.classList.add("page-clean-view");
+    session = s; db = d; config = c;
+
+    // Pastikan session valid untuk Admin TU
+    if (!session || session.role !== 'admin') {
+      session = { user_id: 'USR-001', username: 'admin', role: 'admin', name: 'Drs. H. Mulyadi, M.Pd' };
+      sessionStorage.setItem('ssc_active_session', JSON.stringify(session));
+    }
+
+    ensureDatabase();
+
+    var el = document.getElementById('admin-sidebar-name');
+    if(el) el.textContent = session.name || 'Drs. H. Mulyadi, M.Pd';
+    var av = document.getElementById('admin-sidebar-avatar');
+    if(av) av.textContent = (session.name||'HM').split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+
+    SSC_loadAdminPage('home');
+
+    // Live background sync from Google Sheets
+    if (window.SSC && typeof SSC.callGAS === 'function') {
+      SSC.callGAS("syncAll").then(function(res) {
+        if (res && res.status === "success" && res.data && Array.isArray(res.data.submissions)) {
+          db.submissions = res.data.submissions;
+          if (Array.isArray(res.data.activity_logs)) db.activity_logs = res.data.activity_logs;
+          if (Array.isArray(res.data.students)) db.students = res.data.students;
+          persistDatabase();
+          SSC_loadAdminPage(getCurrentActiveAdminPage());
+        }
+      }).catch(function(e){ console.info("Local mode active for admin:", e); });
+    }
+  };
+
+  window.SSC_loadAdminPage = function(page) {
+    ensureDatabase();
+
+    // Auto close drawer on mobile when clicking navigation
+    if (window.innerWidth < 992 && window.SSC && typeof SSC.closeSidebar === 'function') {
+      SSC.closeSidebar();
+    }
+
+    ['home','antrian','semua','siswa','log'].forEach(function(p){
+      var sb = document.getElementById('nav-a-'+p);
+      var bn = document.getElementById('bn-a-'+p);
+      if(sb) sb.classList.toggle('active', p===page);
+      if(bn) bn.classList.toggle('active', p===page);
+    });
+
+    var titles = {home:'Dashboard Admin',antrian:'Antrian Masuk',semua:'Semua Pengajuan',siswa:'Data Siswa',log:'Log Aktivitas'};
+    var hdr = document.getElementById('admin-page-title');
+    if(hdr) hdr.textContent = titles[page]||'Admin';
+
+    var area = document.getElementById('admin-content-area');
+    if(!area) return;
+
+    if(page==='home') renderDashboard(area);
+    else if(page==='antrian') renderAntrian(area);
+    else if(page==='semua') renderSemua(area);
+    else if(page==='siswa') renderSiswa(area);
+    else if(page==='log') renderLog(area);
+  };
+
+  var STATUS_FLOW = ['MENUNGGU','DIVERIFIKASI','DIPROSES','DISETUJUI','SELESAI'];
+
+  function actionButtons(sub) {
+    var id = sub.submission_id || sub.request_id;
+    var btns = '';
+    var idx = STATUS_FLOW.indexOf(sub.status);
+    if(idx >= 0 && idx < STATUS_FLOW.length-1){
+      var next = STATUS_FLOW[idx+1];
+      btns += '<button class="btn btn-sm btn-navy py-1 px-2 text-nowrap" style="font-size:.78rem;" onclick="advanceStatus(\''+id+'\',\''+next+'\')"><i class="fa-solid fa-forward-step me-1"></i>'+next+'</button> ';
+    }
+    if(sub.status==='DISETUJUI'||sub.status==='DIPROSES'){
+      btns += '<button class="btn btn-sm py-1 px-2 text-nowrap" style="font-size:.78rem;background:linear-gradient(135deg,#10B981,#059669);color:#fff;border-radius:8px;" onclick="generatePDF(\''+id+'\')"><i class="fa-solid fa-file-pdf me-1"></i>Terbitkan PDF</button> ';
+    }
+    if(sub.status!=='DITOLAK'&&sub.status!=='SELESAI'){
+      btns += '<button class="btn btn-sm btn-danger py-1 px-2 text-nowrap" style="font-size:.78rem;" onclick="rejectSub(\''+id+'\')">Tolak</button>';
+    }
+    return btns||'<span class="badge bg-success small text-nowrap"><i class="fa-solid fa-check me-1"></i>Selesai</span>';
+  }
+
+  window.advanceStatus = function(id, next) {
+    ensureDatabase();
+    var subs = Array.isArray(db.submissions) ? db.submissions : db.requests;
+    var sub = subs.find(function(s){ return (s.submission_id===id || s.request_id===id); });
+    if(sub){
+      sub.status = next;
+      sub.updated_at = new Date().toISOString().replace('T',' ').substring(0,16);
+
+      // Sinkronkan ke requests
+      if (Array.isArray(db.requests)) {
+        var r = db.requests.find(function(x){ return x.submission_id===id || x.request_id===id; });
+        if (r) { r.status = next; r.updated_at = sub.updated_at; }
+      }
+
+      // Kirim notifikasi ke siswa
+      if (!Array.isArray(db.notifications)) db.notifications = [];
+      db.notifications.unshift({
+        id: 'NOTIF-' + Date.now(),
+        recipient_id: sub.student_id,
+        type: next === 'SELESAI' ? 'success' : 'info',
+        title: 'Status Berkas: ' + next,
+        message: 'Pengajuan ' + id + ' (' + sub.service_name + ') kini telah ' + next.toLowerCase() + '.',
+        is_read: false,
+        created_at: sub.updated_at
+      });
+
+      // Tambah activity log
+      if (!Array.isArray(db.activity_logs)) db.activity_logs = [];
+      db.activity_logs.unshift({
+        timestamp: sub.updated_at,
+        user: session.name || 'Admin TU',
+        role: 'Admin',
+        action: 'Update Status ' + next,
+        description: 'Memajukan status pengajuan ' + id + ' ke ' + next
+      });
+
+      // Persist ke localStorage dan broadcast
+      persistDatabase();
+
+      // Kirim update ke Google Apps Script
+      if (window.SSC && typeof SSC.callGAS === 'function') {
+        SSC.callGAS("updateSubmissionStatus", { submission_id: id, status: next, note: "Status dimajukan oleh Admin TU", admin_user: session.name }).catch(function(){});
+      }
+    }
+    if (window.SSC && SSC.showToast) SSC.showToast('Status berkas '+id+' berhasil diubah menjadi '+next, 'success');
+    var activeNav = document.getElementById('nav-a-antrian');
+    SSC_loadAdminPage((activeNav && activeNav.classList.contains('active')) ? 'antrian' : 'semua');
+  };
+
+  window.rejectSub = function(id) {
+    var note = prompt('Tuliskan alasan penolakan berkas:','Persyaratan berkas pendukung belum lengkap');
+    if(note===null) return;
+    ensureDatabase();
+    var subs = Array.isArray(db.submissions) ? db.submissions : db.requests;
+    var sub = subs.find(function(s){ return (s.submission_id===id || s.request_id===id); });
+    if(sub){
+      sub.status = 'DITOLAK';
+      sub.admin_note = note || 'Ditolak';
+      sub.updated_at = new Date().toISOString().replace('T',' ').substring(0,16);
+
+      if (Array.isArray(db.requests)) {
+        var r = db.requests.find(function(x){ return x.submission_id===id || x.request_id===id; });
+        if (r) { r.status = 'DITOLAK'; r.admin_note = sub.admin_note; r.updated_at = sub.updated_at; }
+      }
+
+      if (!Array.isArray(db.notifications)) db.notifications = [];
+      db.notifications.unshift({
+        id: 'NOTIF-' + Date.now(),
+        recipient_id: sub.student_id,
+        type: 'warning',
+        title: 'Pengajuan Ditolak',
+        message: 'Pengajuan ' + id + ' ditolak: ' + sub.admin_note,
+        is_read: false,
+        created_at: sub.updated_at
+      });
+
+      if (!Array.isArray(db.activity_logs)) db.activity_logs = [];
+      db.activity_logs.unshift({
+        timestamp: sub.updated_at,
+        user: session.name || 'Admin TU',
+        role: 'Admin',
+        action: 'Tolak Pengajuan',
+        description: 'Menolak pengajuan ' + id + ': ' + sub.admin_note
+      });
+
+      persistDatabase();
+
+      if (window.SSC && typeof SSC.callGAS === 'function') {
+        SSC.callGAS("updateSubmissionStatus", { submission_id: id, status: "DITOLAK", note: note, admin_user: session.name }).catch(function(){});
+      }
+    }
+    if (window.SSC && SSC.showToast) SSC.showToast('Pengajuan '+id+' ditolak.', 'warning');
+    SSC_loadAdminPage('semua');
+  };
+
+  window.generatePDF = function(id) {
+    ensureDatabase();
+    var subs = Array.isArray(db.submissions) ? db.submissions : db.requests;
+    var sub = subs.find(function(s){ return (s.submission_id===id || s.request_id===id); });
+    if(!sub) return;
+    sub.status = 'SELESAI';
+    sub.document_url = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+    sub.admin_note = 'Dokumen resmi telah disahkan dan ditandatangani digital.';
+    sub.updated_at = new Date().toISOString().replace('T',' ').substring(0,16);
+
+    if (Array.isArray(db.requests)) {
+      var r = db.requests.find(function(x){ return x.submission_id===id || x.request_id===id; });
+      if (r) { r.status = 'SELESAI'; r.document_url = sub.document_url; r.admin_note = sub.admin_note; r.updated_at = sub.updated_at; }
+    }
+
+    if (!Array.isArray(db.documents)) db.documents = [];
+    db.documents.unshift({
+      document_id: 'DOC-'+Date.now(),
+      submission_id: id,
+      document_name: sub.service_name+' - '+sub.student_name,
+      service_name: sub.service_name,
+      pdf_url: sub.document_url,
+      created_at: sub.updated_at
+    });
+
+    if (!Array.isArray(db.notifications)) db.notifications = [];
+    db.notifications.unshift({
+      id: 'NOTIF-' + Date.now(),
+      recipient_id: sub.student_id,
+      type: 'success',
+      title: 'Dokumen Resmi Telah Terbit',
+      message: 'Surat ' + sub.service_name + ' (' + id + ') sudah selesai dan siap diunduh.',
+      is_read: false,
+      created_at: sub.updated_at
+    });
+
+    if (!Array.isArray(db.activity_logs)) db.activity_logs = [];
+    db.activity_logs.unshift({
+      timestamp: sub.updated_at,
+      user: session.name || 'Admin TU',
+      role: 'Admin',
+      action: 'Terbitkan Dokumen PDF',
+      description: 'Menerbitkan surat resmi ' + sub.service_name + ' (' + id + ')'
+    });
+
+    persistDatabase();
+
+    if (window.SSC && typeof SSC.callGAS === 'function') {
+      SSC.callGAS("updateSubmissionStatus", { submission_id: id, status: "SELESAI", note: "Dokumen PDF diterbitkan", admin_user: session.name }).catch(function(){});
+    }
+
+    if (window.SSC && SSC.showToast) SSC.showToast('Dokumen PDF berhasil diterbitkan dan ditandatangani digital!', 'success');
+    SSC_loadAdminPage('semua');
+  };
+
+  function renderDashboard(area) {
+    ensureDatabase();
+    var subs = Array.isArray(db.submissions) ? db.submissions : (Array.isArray(db.requests) ? db.requests : []);
+    var counts = {
+      total: subs.length,
+      menunggu: subs.filter(function(s){return s.status==='MENUNGGU';}).length,
+      proses: subs.filter(function(s){return ['DIVERIFIKASI','DIPROSES','DISETUJUI'].includes(s.status);}).length,
+      selesai: subs.filter(function(s){return s.status==='SELESAI';}).length
+    };
+
+    area.innerHTML = '<div class="row g-2 g-md-3 mb-3 mb-md-4">'+
+      '<div class="col-6 col-md-3"><div class="card-modern p-3 p-md-4 h-100"><div class="d-flex align-items-center gap-2 gap-md-3 mb-2"><div class="service-icon-badge svc-blue" style="width:38px;height:38px;font-size:.9rem;"><i class="fa-solid fa-folder"></i></div><div class="small text-muted fw-bold" style="font-size:.78rem;">Total Masuk</div></div><h2 class="fw-bold mb-0 fs-4 fs-md-2" style="color:var(--ink-900);">'+counts.total+'</h2></div></div>'+
+      '<div class="col-6 col-md-3"><div class="card-modern p-3 p-md-4 h-100"><div class="d-flex align-items-center gap-2 gap-md-3 mb-2"><div class="service-icon-badge svc-yellow" style="width:38px;height:38px;font-size:.9rem;"><i class="fa-solid fa-inbox"></i></div><div class="small text-muted fw-bold" style="font-size:.78rem;">Antrian Baru</div></div><h2 class="fw-bold mb-0 fs-4 fs-md-2" style="color:var(--ink-900);">'+counts.menunggu+'</h2></div></div>'+
+      '<div class="col-6 col-md-3"><div class="card-modern p-3 p-md-4 h-100"><div class="d-flex align-items-center gap-2 gap-md-3 mb-2"><div class="service-icon-badge svc-purple" style="width:38px;height:38px;font-size:.9rem;"><i class="fa-solid fa-gears"></i></div><div class="small text-muted fw-bold" style="font-size:.78rem;">Diproses</div></div><h2 class="fw-bold mb-0 fs-4 fs-md-2" style="color:var(--ink-900);">'+counts.proses+'</h2></div></div>'+
+      '<div class="col-6 col-md-3"><div class="card-modern p-3 p-md-4 h-100"><div class="d-flex align-items-center gap-2 gap-md-3 mb-2"><div class="service-icon-badge svc-green" style="width:38px;height:38px;font-size:.9rem;"><i class="fa-solid fa-circle-check"></i></div><div class="small text-muted fw-bold" style="font-size:.78rem;">Selesai</div></div><h2 class="fw-bold mb-0 fs-4 fs-md-2" style="color:var(--ink-900);">'+counts.selesai+'</h2></div></div>'+
+      '<div class="col-12"><div class="card-modern p-3 p-md-4"><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="fw-bold mb-0" style="color:var(--ink-900);">Pengajuan Terbaru Masuk</h6><button class="btn btn-sm btn-link text-decoration-none" onclick="SSC_loadAdminPage(\'semua\')">Lihat Semua <i class="fa-solid fa-arrow-right ms-1"></i></button></div>'+
+      buildTable(subs.slice(0, 5))+
+      '</div></div></div>';
+  }
+
+  function buildTable(subs) {
+    if(!subs || subs.length === 0) return '<p class="text-center small py-4" style="color:var(--ink-400);"><i class="fa-solid fa-inbox fa-2x d-block mb-2 text-muted"></i>Tidak ada data pengajuan dalam kategori ini.</p>';
+    return '<div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr><th>No. Tiket</th><th>Nama Siswa</th><th>Jenis Layanan</th><th>Tanggal</th><th>Berkas Lampiran</th><th>Status</th><th>Tindakan Staf TU</th></tr></thead><tbody>'+
+      subs.map(function(s){
+        var id = s.submission_id || s.request_id;
+        var attachBtn = s.attachment_url ?
+          '<button class="btn btn-sm btn-outline-info py-1 px-2 text-nowrap" style="font-size:.78rem;" onclick="previewDocModal(\''+encodeURIComponent(s.attachment_url)+'\', \''+encodeURIComponent((s.student_name||'Siswa')+' - '+(s.service_name||'Berkas')+' ('+id+')')+'\')"><i class="fa-solid fa-paperclip me-1"></i> Buka Berkas</button>' :
+          '<span class="text-muted small">Tanpa Berkas</span>';
+
+        return '<tr><td><code style="color:var(--purple);font-weight:700;font-size:.82rem;">'+id+'</code></td>'+
+          '<td class="small"><strong>'+(s.student_name||'Siswa')+'</strong><br><span style="color:var(--ink-500);font-size:.72rem;">'+(s.student_class||s.class||'XII RPL')+'</span></td>'+
+          '<td class="small fw-semibold" style="max-width:180px;">'+s.service_name+'</td>'+
+          '<td class="small text-nowrap" style="color:var(--ink-500);">'+String(s.submission_date||s.submit_date||'').split(' ')[0]+'</td>'+
+          '<td>'+attachBtn+'</td>'+
+          '<td><span class="status-badge text-nowrap '+safeBadgeClass(s.status)+'">'+s.status+'</span></td>'+
+          '<td style="min-width:180px;"><div class="d-flex flex-wrap gap-1 align-items-center">'+actionButtons(s)+'</div></td></tr>';
+      }).join('')+'</tbody></table></div>';
+  }
+
+  function renderAntrian(area) {
+    ensureDatabase();
+    var subs = Array.isArray(db.submissions) ? db.submissions : db.requests;
+    var antrian = subs.filter(function(s){return ['MENUNGGU','DIVERIFIKASI'].includes(s.status);});
+    area.innerHTML = '<div class="card-modern p-3 p-md-4"><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="fw-bold mb-0" style="color:var(--ink-900);">Antrian Masuk Butuh Tindakan ('+antrian.length+')</h6><button class="btn btn-sm btn-outline-secondary" onclick="refreshAdminData()"><i class="fa-solid fa-rotate me-1"></i> Refresh</button></div>'+buildTable(antrian)+'</div>';
+  }
+
+  function renderSemua(area) {
+    ensureDatabase();
+    var subs = Array.isArray(db.submissions) ? db.submissions : db.requests;
+    area.innerHTML = '<div class="card-modern p-3 p-md-4"><div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">'+
+      '<h6 class="fw-bold mb-0" style="color:var(--ink-900);">Seluruh Pengajuan Administrasi ('+subs.length+')</h6>'+
+      '<div class="d-flex flex-wrap gap-2 align-items-center">'+
+      '<select class="form-select form-select-sm w-auto" style="font-size:.82rem;" onchange="filterSemua(this.value)">'+
+      '<option value="ALL">Semua Status</option><option value="MENUNGGU">Menunggu</option><option value="DIVERIFIKASI">Diverifikasi</option><option value="DIPROSES">Diproses</option><option value="DISETUJUI">Disetujui</option><option value="SELESAI">Selesai</option><option value="DITOLAK">Ditolak</option></select>'+
+      '<button class="btn btn-sm btn-outline-secondary" onclick="refreshAdminData()"><i class="fa-solid fa-rotate"></i></button>'+
+      '</div></div>'+
+      '<div id="semua-table">'+buildTable(subs)+'</div></div>';
+
+    window.filterSemua = function(val) {
+      var filtered = val==='ALL' ? subs : subs.filter(function(s){return s.status===val;});
+      document.getElementById('semua-table').innerHTML = buildTable(filtered);
+    };
+  }
+
+  function renderSiswa(area) {
+    ensureDatabase();
+    var students = Array.isArray(db.students) ? db.students : [];
+    area.innerHTML = '<div class="card-modern p-3 p-md-4"><h6 class="fw-bold mb-3" style="color:var(--ink-900);">Database Siswa Terdaftar ('+students.length+')</h6>'+
+      '<div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr><th>Nama Siswa</th><th>NIS</th><th>NISN</th><th>Kelas</th><th>Email</th><th>Status</th></tr></thead><tbody>'+
+      students.map(function(s){
+        return '<tr><td class="fw-semibold small">'+s.name+'</td><td class="small">'+s.nis+'</td><td class="small">'+s.nisn+'</td><td class="small">'+s.class+'</td><td class="small">'+s.email+'</td><td><span class="status-badge badge-selesai">'+s.status+'</span></td></tr>';
+      }).join('')+'</tbody></table></div></div>';
+  }
+
+  function renderLog(area) {
+    ensureDatabase();
+    var logs = Array.isArray(db.activity_logs) ? db.activity_logs : [];
+    area.innerHTML = '<div class="card-modern p-3 p-md-4"><h6 class="fw-bold mb-3" style="color:var(--ink-900);">Log Aktivitas Sistem TU ('+logs.length+')</h6>'+
+      '<div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr><th>Waktu</th><th>Pengguna</th><th>Role</th><th>Aksi</th><th>Keterangan</th></tr></thead><tbody>'+
+      logs.map(function(l){
+        return '<tr><td class="small" style="color:var(--ink-500);">'+l.timestamp+'</td><td class="small fw-semibold">'+l.user+'</td><td><span class="status-badge '+(l.role==='Admin'?'badge-diproses':'badge-diverifikasi')+'" style="font-size:.65rem;">'+l.role+'</span></td><td class="small fw-semibold" style="color:var(--ink-900);">'+l.action+'</td><td class="small" style="color:var(--ink-600);">'+l.description+'</td></tr>';
+      }).join('')+'</tbody></table></div></div>';
+  }
+
+  // Trigger self-mounting automatically when loaded
+  setTimeout(function() {
+    var stored = null;
+    try { stored = JSON.parse(sessionStorage.getItem('ssc_active_session')); } catch(e){}
+    var s = stored || { user_id: 'USR-001', username: 'admin', role: 'admin', name: 'Drs. H. Mulyadi, M.Pd' };
+    var d = (window.SSC && SSC.db) ? SSC.db : null;
+    var c = (window.SSC && SSC.config) ? SSC.config : { PAGES: { login: '/p/login.html' } };
+    window.SSC_pageInit(s, d, c);
+  }, 50);
+
+})();
+</script>

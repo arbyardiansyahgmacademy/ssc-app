@@ -1,0 +1,224 @@
+<!--
+  ╔══════════════════════════════════════════════╗
+  ║  PAGE: CEK PENGAJUAN                         ║
+  ║  Blogger Page URL: /p/cek-pengajuan.html    ║
+  ║  REAL-TIME TRACKER & ACCESSIBLE AEO/GEO      ║
+  ╚══════════════════════════════════════════════╝
+-->
+<script>window.SSC_PAGE = 'cek-pengajuan';</script>
+
+<div class="container py-5">
+  <header class="text-center mb-5 reveal">
+    <span class="section-eyebrow">Pelacakan Real-Time</span>
+    <h1 class="fw-bold mb-2" style="color:var(--ink-900);font-size:2.2rem;">Lacak Status Pengajuan Surat</h1>
+    <p style="color:var(--ink-500);max-width:600px;margin:0 auto;font-size:1.05rem;">
+      Masukkan Nomor Resi Tiket pengajuan Anda untuk melihat perkembangan verifikasi dokumen secara langsung — tanpa perlu login.
+    </p>
+  </header>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Search Card -->
+      <section class="card-modern p-4 p-md-5 mb-4 text-center reveal reveal-scale" aria-label="Form Pelacakan">
+        <div class="service-icon-badge svc-orange mx-auto mb-3" style="width:68px;height:68px;font-size:1.6rem;">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <h2 class="fw-bold mb-2" style="color:var(--ink-900);font-size:1.4rem;">Masukkan Nomor Resi Pengajuan</h2>
+        <p class="small mb-4" style="color:var(--ink-500);">
+          Format: <strong style="color:var(--orange-600);">REQ-TAHUN-NOMOR</strong> (contoh: <code style="color:var(--orange-600);font-weight:700;">REQ-2026-001</code>)
+        </p>
+
+        <form onsubmit="event.preventDefault(); handlePublicTrack();" class="mb-3">
+          <div class="input-group input-group-lg">
+            <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-ticket" style="color:var(--ink-500);"></i></span>
+            <input type="text" id="public-track-input" class="form-control border-start-0" placeholder="Ketik nomor resi..." value="REQ-2026-001" required aria-label="Nomor Resi">
+            <button type="submit" id="btn-track-submit" class="btn btn-navy px-4">
+              <i class="fa-solid fa-search me-1 d-none d-sm-inline"></i> Lacak Status
+            </button>
+          </div>
+        </form>
+        <small style="color:var(--ink-500);">
+          <i class="fa-solid fa-circle-info me-1"></i> Nomor resi diberikan pada dashboard sesaat setelah Anda mengirim permohonan surat.
+        </small>
+      </section>
+
+      <!-- Tracking Result Container -->
+      <div id="tracking-result-box" class="card-modern p-4 p-md-5 d-none mb-4" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <!-- Help & Status Definitions -->
+  <section class="row g-4 mt-2 mb-5 perf-deferred" aria-label="Informasi Status">
+    <div class="col-lg-4 reveal delay-1">
+      <div class="help-mini-card h-100">
+        <div class="help-mini-icon"><i class="fa-solid fa-location-dot"></i></div>
+        <h3 class="fw-bold mb-2" style="color:var(--ink-900);font-size:1.05rem;">Di Mana Nomor Resi Saya?</h3>
+        <p class="mb-0" style="color:var(--ink-500);font-size:.86rem;line-height:1.65;">
+          Nomor resi otomatis dibuat saat Anda mengirim permohonan. Anda juga dapat melihat seluruh riwayat resi di menu <strong><a href="/p/dashboard.html" style="color:var(--orange-600);text-decoration:none;">Dashboard Siswa</a></strong>.
+        </p>
+      </div>
+    </div>
+    <div class="col-lg-4 reveal delay-2">
+      <div class="help-mini-card h-100">
+        <div class="help-mini-icon"><i class="fa-solid fa-list-check"></i></div>
+        <h3 class="fw-bold mb-2" style="color:var(--ink-900);font-size:1.05rem;">Arti Status Dokumen</h3>
+        <p class="mb-0" style="color:var(--ink-500);font-size:.86rem;line-height:1.65;">
+          <span class="status-badge" style="background:var(--orange-100);color:var(--orange-700);font-size:.68rem;padding:2px 8px;">MENUNGGU</span> Verifikasi data awal<br>
+          <span class="status-badge" style="background:#DBEAFE;color:#1D4ED8;font-size:.68rem;padding:2px 8px;">DIPROSES</span> Penandatanganan digital<br>
+          <span class="status-badge" style="background:#D1FAE5;color:#047857;font-size:.68rem;padding:2px 8px;">SELESAI</span> Dokumen PDF siap diunduh
+        </p>
+      </div>
+    </div>
+    <div class="col-lg-4 reveal delay-3">
+      <div class="help-mini-card h-100">
+        <div class="help-mini-icon"><i class="fa-solid fa-headset"></i></div>
+        <h3 class="fw-bold mb-2" style="color:var(--ink-900);font-size:1.05rem;">Butuh Bantuan Cepat?</h3>
+        <p class="mb-3" style="color:var(--ink-500);font-size:.86rem;line-height:1.65;">
+          Jika pengajuan Anda belum mengalami pembaruan lebih dari 2 hari kerja, segera hubungi staf administrasi kami.
+        </p>
+        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener" class="btn btn-navy btn-sm w-100">
+          <i class="fa-brands fa-whatsapp me-1"></i> WhatsApp Tata Usaha
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Test Resi Cards -->
+  <section class="card-modern p-4 p-md-5 mt-2 reveal perf-deferred">
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <div class="service-icon-badge svc-blue" style="width:44px;height:44px;font-size:1rem;"><i class="fa-solid fa-clock-rotate-left"></i></div>
+      <div>
+        <h3 class="fw-bold mb-0" style="color:var(--ink-900);font-size:1.15rem;">Coba Nomor Resi Demonstrasi</h3>
+        <p class="mb-0" style="color:var(--ink-500);font-size:.84rem;">Klik salah satu nomor resi di bawah ini untuk menguji fitur pelacakan langsung:</p>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="p-3 rounded-3 border d-flex justify-content-between align-items-center bg-white" style="border-color:var(--ink-100)!important;">
+          <div>
+            <strong class="d-block" style="color:var(--ink-900);font-size:.88rem;">REQ-2026-001</strong>
+            <span style="color:var(--ink-500);font-size:.78rem;">Surat Keterangan Aktif (Selesai)</span>
+          </div>
+          <button class="btn btn-sm btn-outline-navy" onclick="document.getElementById('public-track-input').value='REQ-2026-001';handlePublicTrack();">Cek</button>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 rounded-3 border d-flex justify-content-between align-items-center bg-white" style="border-color:var(--ink-100)!important;">
+          <div>
+            <strong class="d-block" style="color:var(--ink-900);font-size:.88rem;">REQ-2026-002</strong>
+            <span style="color:var(--ink-500);font-size:.78rem;">Surat Pengantar PKL (Diproses)</span>
+          </div>
+          <button class="btn btn-sm btn-outline-navy" onclick="document.getElementById('public-track-input').value='REQ-2026-002';handlePublicTrack();">Cek</button>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 rounded-3 border d-flex justify-content-between align-items-center bg-white" style="border-color:var(--ink-100)!important;">
+          <div>
+            <strong class="d-block" style="color:var(--ink-900);font-size:.88rem;">REQ-2026-003</strong>
+            <span style="color:var(--ink-500);font-size:.78rem;">Rekomendasi Beasiswa (Menunggu)</span>
+          </div>
+          <button class="btn btn-sm btn-outline-navy" onclick="document.getElementById('public-track-input').value='REQ-2026-003';handlePublicTrack();">Cek</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Interactive Tracker Engine -->
+<script>
+function handlePublicTrack() {
+  var inputEl = document.getElementById("public-track-input");
+  var resBox = document.getElementById("tracking-result-box");
+  var btn = document.getElementById("btn-track-submit");
+  if (!inputEl || !resBox) return;
+
+  var code = inputEl.value.trim().toUpperCase();
+  if (!code) {
+    if (window.SSC && SSC.showToast) SSC.showToast("Silakan masukkan nomor resi tiket.", "warning");
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Melacak...';
+  }
+
+  setTimeout(function() {
+    var db = (window.SSC && SSC.db) ? SSC.db : (window.DUMMY_DB || { requests: [] });
+    var allReqs = (db.submissions || db.requests || []);
+    var found = allReqs.find(function(r) {
+      var sId = (r.submission_id || "").toUpperCase();
+      var rId = (r.request_id || "").toUpperCase();
+      return sId === code || rId === code || sId.replace("SSC-", "REQ-") === code || rId.replace("REQ-", "SSC-") === code;
+    });
+
+    resBox.classList.remove("d-none");
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-search me-1 d-none d-sm-inline"></i> Lacak Status';
+    }
+
+    if (!found) {
+      resBox.innerHTML = '<div class="text-center py-4">' +
+        '<div class="service-icon-badge svc-red mx-auto mb-3" style="width:54px;height:54px;font-size:1.3rem;"><i class="fa-solid fa-triangle-exclamation"></i></div>' +
+        '<h4 class="fw-bold mb-1" style="color:var(--ink-900);">Nomor Resi Tidak Ditemukan</h4>' +
+        '<p class="small mb-3" style="color:var(--ink-500);">Resi <strong>' + code + '</strong> tidak ada dalam sistem. Pastikan kode resi yang Anda masukkan sudah benar.</p>' +
+        '<button class="btn btn-outline-navy btn-sm" onclick="document.getElementById(\'public-track-input\').select();">Coba Lagi</button>' +
+        '</div>';
+      return;
+    }
+
+    var ticketDisplay = found.submission_id || found.request_id || code;
+    var stUpper = String(found.status || '').toUpperCase();
+    var isDone = stUpper === "SELESAI";
+    var isProgress = ["DIPROSES", "DIVERIFIKASI", "DISETUJUI"].indexOf(stUpper) >= 0;
+    var badgeStyle = isDone ? "background:#D1FAE5;color:#047857;" : (isProgress ? "background:#DBEAFE;color:#1D4ED8;" : (stUpper === "DITOLAK" ? "background:#FEE2E2;color:#DC2626;" : "background:var(--orange-100);color:var(--orange-700);"));
+    var s2 = (isProgress || isDone) ? "completed" : "pending";
+    var s3 = isDone ? "completed" : "pending";
+
+    var attachHtml = found.attachment_url ?
+      '<div class="col-sm-6"><strong class="d-block small text-muted">Berkas Lampiran:</strong><a href="' + found.attachment_url + '" target="_blank" class="btn btn-sm btn-outline-primary py-0 px-2 mt-1" style="font-size:.78rem;"><i class="fa-solid fa-paperclip me-1"></i> Lihat Berkas Pengajuan</a></div>' :
+      '<div class="col-sm-6"><strong class="d-block small text-muted">Berkas Lampiran:</strong><span class="text-muted small">Tidak ada berkas tambahan</span></div>';
+
+    var downloadAction = isDone ?
+      '<a href="' + (found.document_url || found.drive_url || '#') + '" target="_blank" class="btn btn-navy px-4 py-2"><i class="fa-solid fa-download me-2"></i> Unduh Surat PDF Resmi</a>' :
+      (stUpper === "DITOLAK" ? '<span class="text-danger small fw-semibold"><i class="fa-solid fa-circle-xmark me-1"></i> Permohonan ditolak oleh Tata Usaha. Silakan hubungi staf sekolah.</span>' : '<span class="text-muted small"><i class="fa-solid fa-clock me-1"></i> Dokumen sedang dalam alur verifikasi resmi Tata Usaha.</span>');
+
+    resBox.innerHTML = '<div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-4 pb-3 border-bottom">' +
+      '<div>' +
+        '<span class="text-muted small">Nomor Resi Tiket:</span>' +
+        '<h4 class="fw-bold mb-0 text-primary">' + ticketDisplay + '</h4>' +
+      '</div>' +
+      '<span class="status-badge" style="' + badgeStyle + 'font-size:.85rem;padding:6px 14px;border-radius:20px;font-weight:700;">' + stUpper + '</span>' +
+    '</div>' +
+    '<div class="row g-3 mb-4 text-start">' +
+      '<div class="col-sm-6"><strong class="d-block small text-muted">Jenis Dokumen:</strong><span class="fw-semibold">' + found.service_name + '</span></div>' +
+      '<div class="col-sm-6"><strong class="d-block small text-muted">Pemohon:</strong><span class="fw-semibold">' + found.student_name + ' (' + (found.student_class || found.class || 'XII') + ')</span></div>' +
+      '<div class="col-sm-6"><strong class="d-block small text-muted">Waktu Diajukan:</strong><span>' + (found.submission_date || found.submit_date || '-') + ' WIB</span></div>' +
+      '<div class="col-sm-6"><strong class="d-block small text-muted">Catatan Petugas TU:</strong><span>' + (found.admin_note || "Sedang ditelaah oleh tim verifikator.") + '</span></div>' +
+      attachHtml +
+    '</div>' +
+    '<div class="p-3 rounded-3 mb-4 bg-light">' +
+      '<div class="d-flex justify-content-between text-center small fw-semibold">' +
+        '<div style="color:var(--success);"><i class="fa-solid fa-circle-check me-1"></i> 1. Pengajuan Masuk</div>' +
+        '<div style="' + (s2==="completed" ? "color:var(--success);" : "color:var(--ink-400);") + '"><i class="fa-solid fa-circle-check me-1"></i> 2. Verifikasi &amp; TTD</div>' +
+        '<div style="' + (s3==="completed" ? "color:var(--success);" : "color:var(--ink-400);") + '"><i class="fa-solid fa-circle-check me-1"></i> 3. Terbit (Selesai)</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="text-center">' + downloadAction + '</div>';
+  }, 350);
+}
+
+window.handlePublicTrack = handlePublicTrack;
+if (window.SSC) { window.SSC.handlePublicTrack = handlePublicTrack; }
+window.SSC_pageInit = function() {
+  if (window.SSC && SSC.setupReveal) SSC.setupReveal();
+  var params = new URLSearchParams(window.location.search);
+  var ticket = params.get('ticket');
+  if (ticket) {
+    var inputEl = document.getElementById("public-track-input");
+    if (inputEl) inputEl.value = ticket;
+  }
+  handlePublicTrack();
+};
+</script>

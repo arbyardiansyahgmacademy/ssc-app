@@ -1,0 +1,51 @@
+============================================================
+PANDUAN PEMBARUAN SISTEM SSC (NAVBAR TETAP & OPTIMASI MOBILE)
+============================================================
+
+Pembaruan yang baru saja diselesaikan:
+1. PERBAIKAN NAVBAR UTAMA (FIXED & PROFESSIONAL SCROLL):
+   - Navbar utama kini menggunakan sistem `position: fixed` dengan efek Glassmorphism (blur 16px) dan garis batas halus.
+   - Saat halaman discroll, navbar TETAP di bagian atas layar (tidak ikut naik menghilang ke atas) layaknya website profesional & portal modern (Gov/Apple/Stripe).
+   - Efek `.nav-scrolled` otomatis aktif saat discroll > 20px dengan bayangan elegan (elevation shadow).
+   - Padding halaman telah disesuaikan secara otomatis (`padding-top: 76px` desktop, `70px` mobile) sehingga konten paling atas tidak tertutup navbar.
+   - Menu dropdown hamburger mobile diubah menjadi kartu terapung (floating card) dengan tombol Siswa & Admin berukuran jari penuh (touch-friendly) dan otomatis menutup saat link ditekan.
+
+2. OPTIMASI TAMPILAN MOBILE & USER FRIENDLY (DASHBOARD SISWA & ADMIN):
+   - Kartu Statistik: Menggunakan grid proporsional (`g-2 g-md-3`, `p-3 p-md-4`) dengan tipografi responsif agar angka tidak sesak di layar HP sempit (iPhone/Android).
+   - Header Dashboard: Judul dan tombol sinkronisasi/keluar dipadatkan agar tidak meluap (overflow) di layar mobile.
+   - Sidebar Drawer: Memperbaiki bug tombol hamburger (sinkronisasi `.open` dan `.show`), menambahkan tombol tutup silang (X) di drawer, penguncian scroll latar belakang saat drawer aktif, serta otomatis menutup drawer saat menu dipilih.
+   - Bottom Nav Mobile: Dilengkapi dukungan `safe-area-inset-bottom` untuk iPhone dan Android dengan navigasi gestur agar tidak tertutup bilah navigasi HP.
+   - Modal Pratinjau Berkas: Di mobile berubah menjadi bottom sheet yang nyaman dengan fitur tutup instan jika klik di luar area modal (backdrop click-to-close).
+   - Tabel Responsif: Seluruh tombol aksi (Terbitkan PDF, Advance Status, Buka Berkas) memiliki `text-nowrap` dan jarak sentuh yang ergonomis.
+   - Pencegahan Auto-Zoom iOS Safari: Menyesuaikan ukuran input form pada mobile menjadi 16px agar browser tidak zoom mendadak saat mengisi formulir.
+
+------------------------------------------------------------
+FILE YANG HARUS DIGANTI DENGAN KODE BARU DI BLOGGER:
+------------------------------------------------------------
+
+1. TEMA MASTER BLOGGER:
+   File: [SSC-BLOGGER-FILES/01_BLOGGER-THEME-EDIT-HTML.xml]
+   Cara:
+   - Buka Dashboard Blogger > Menu "Tema" (Theme).
+   - Klik tanda panah bawah di samping tombol 'Sesuaikan' > Pilih 'Edit HTML'.
+   - Hapus SELURUH kode yang ada di kotak editor Blogger (Ctrl+A lalu Del).
+   - Buka file 01_BLOGGER-THEME-EDIT-HTML.xml, Salin (Copy) SEMUA isinya, lalu Tempel (Paste) ke editor Blogger.
+   - Klik tombol Simpan (ikon disket di kanan atas).
+
+2. HALAMAN DASHBOARD SISWA:
+   File: [SSC-BLOGGER-FILES/pages/dashboard.html]
+   Cara:
+   - Buka Dashboard Blogger > Menu "Halaman" (Pages) > Klik halaman "Dashboard".
+   - Di kiri atas editor, pastikan mode "Tampilan HTML" (<>).
+   - Hapus seluruh isinya, Paste seluruh isi file dashboard.html yang baru.
+   - Klik tombol "Perbarui" (Update).
+
+3. HALAMAN DASHBOARD ADMIN TU:
+   File: [SSC-BLOGGER-FILES/pages/admin.html]
+   Cara:
+   - Buka Dashboard Blogger > Menu "Halaman" (Pages) > Klik halaman "Admin".
+   - Pastikan mode "Tampilan HTML" (<>).
+   - Hapus seluruh isinya, Paste seluruh isi file admin.html yang baru.
+   - Klik tombol "Perbarui" (Update).
+
+============================================================

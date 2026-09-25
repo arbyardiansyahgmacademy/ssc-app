@@ -1,0 +1,794 @@
+<style>
+/* Clean Fullscreen View for Dashboard */
+#public-navbar, #ssc-footer, .ssc-footer, #floatingStack, .floating-stack, .floating-top, #backToTop, .floating-whatsapp-btn {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+#main-content, #blogger-ssc-root {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+.dropzone-active {
+  border-color: var(--orange-500) !important;
+  background: var(--orange-100) !important;
+}
+.modal-preview-box {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35);
+  overflow: hidden;
+  animation: modalFadeIn .2s ease-out;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+@media (max-width: 576px) {
+  #previewDocModalBackdrop {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .modal-preview-box {
+    max-height: 92vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    margin-top: auto !important;
+  }
+}
+@media (max-width: 767.98px) {
+  #studentDashboard .main-viewport > header.sticky-top {
+    padding: 10px 16px !important;
+  }
+  #studentDashboard #page-title-header {
+    font-size: 1rem !important;
+  }
+  #studentDashboard #page-sub-header {
+    display: none !important;
+  }
+  .table-responsive {
+    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+</style>
+<!-- PAGE: DASHBOARD SISWA — /p/dashboard -->
+<script>window.SSC_PAGE = 'dashboard';</script>
+<div class="dashboard-wrapper" id="studentDashboard">
+  <!-- SIDEBAR -->
+  <aside id="appSidebar" class="app-sidebar position-relative">
+    <!-- Mobile Drawer Close Button -->
+    <button class="btn btn-sm btn-light d-lg-none position-absolute top-0 end-0 m-3 rounded-circle shadow-sm" onclick="SSC.closeSidebar()" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;z-index:10;" aria-label="Tutup Menu">
+      <i class="fa-solid fa-xmark fs-6"></i>
+    </button>
+    <div class="p-4 pb-2">
+      <div class="d-flex align-items-center gap-2 mb-4">
+        <div class="text-white rounded-3 p-2 d-flex align-items-center justify-content-center" style="width:38px;height:38px;background:linear-gradient(135deg,var(--orange-500),var(--orange-600));flex-shrink:0;">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div><span class="fw-bold d-block lh-1 small" style="color:var(--ink-900);">STUDENT SERVICE</span><span style="font-size:.65rem;letter-spacing:1.5px;color:var(--orange-500);font-weight:700;">CENTER</span></div>
+      </div>
+      <div class="p-3 rounded-3 mb-4" style="background:linear-gradient(135deg,var(--orange-50),var(--cream));border:1px solid var(--orange-100);">
+        <div class="d-flex align-items-center gap-3">
+          <div class="service-icon-badge svc-orange" style="width:42px;height:42px;font-size:1rem;flex-shrink:0;" id="sidebar-avatar">AP</div>
+          <div><div class="fw-bold small" id="sidebar-name" style="color:var(--ink-900);">Arbi Pratama</div><div style="font-size:.72rem;color:var(--ink-500);" id="sidebar-class">XII Rekayasa Perangkat Lunak 1</div></div>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-grow-1 overflow-auto px-2 pb-3">
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-400);padding:8px 16px 6px;">Menu Utama</div>
+      <a class="nav-link active" href="javascript:void(0)" id="nav-s-home" onclick="SSC_loadStudentPage('home')"><i class="fa-solid fa-house"></i> Beranda</a>
+      <a class="nav-link" href="javascript:void(0)" id="nav-s-ajukan" onclick="SSC_loadStudentPage('ajukan')"><i class="fa-solid fa-paper-plane"></i> Ajukan Layanan</a>
+      <a class="nav-link" href="javascript:void(0)" id="nav-s-pengajuan" onclick="SSC_loadStudentPage('pengajuan')"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pengajuan</a>
+      <a class="nav-link" href="javascript:void(0)" id="nav-s-dokumen" onclick="SSC_loadStudentPage('dokumen')"><i class="fa-solid fa-file-pdf"></i> Dokumen Saya</a>
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-400);padding:12px 16px 6px;">Akun</div>
+      <a class="nav-link" href="javascript:void(0)" id="nav-s-profil" onclick="SSC_loadStudentPage('profil')"><i class="fa-solid fa-user-circle"></i> Profil Saya</a>
+      <a class="nav-link" href="javascript:void(0)" onclick="SSC.handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <div class="main-viewport">
+    <!-- Top Header -->
+    <header class="sticky-top d-flex align-items-center gap-2 gap-sm-3">
+      <button class="btn p-2 d-lg-none border-0 shadow-none rounded-3" onclick="SSC.toggleSidebar()" aria-label="Buka Menu">
+        <i class="fa-solid fa-bars fs-5" style="color:var(--ink-700);"></i>
+      </button>
+      <div class="overflow-hidden">
+        <h6 class="fw-bold mb-0 text-truncate" id="page-title-header" style="color:var(--ink-900);">Beranda Siswa</h6>
+        <small id="page-sub-header" class="d-none d-sm-block text-truncate" style="color:var(--ink-500);">Dashboard Student Service Center</small>
+      </div>
+      <div class="ms-auto d-flex align-items-center gap-2 flex-shrink-0">
+        <button class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 gap-sm-2 rounded-3 py-1 px-2 px-sm-3" onclick="refreshStudentData()" title="Sinkronkan Data" id="btn-sync-student">
+          <i class="fa-solid fa-rotate" id="sync-icon-student"></i> <span class="d-none d-sm-inline" style="font-size:.78rem;">Sinkronkan</span>
+        </button>
+        <button class="btn btn-sm position-relative p-2 rounded-3 border-0" style="background:var(--ink-50);" id="notif-btn" onclick="SSC_loadStudentPage('home')">
+          <i class="fa-solid fa-bell" style="color:var(--ink-600);font-size:1rem;"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill" style="background:var(--orange-500);font-size:.55rem;width:16px;height:16px;display:flex;align-items:center;justify-content:center;" id="notif-badge">0</span>
+        </button>
+        <button class="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1 rounded-3 py-1 px-2 px-sm-3" onclick="SSC.handleLogout()" style="font-size:.82rem;" title="Keluar"><i class="fa-solid fa-right-from-bracket"></i> <span class="d-none d-sm-inline">Keluar</span></button>
+      </div>
+    </header>
+
+    <!-- CONTENT AREA -->
+    <div class="p-3 p-md-4 flex-grow-1" id="student-content-area">
+      <!-- Mounted dynamically -->
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV MOBILE -->
+  <nav class="bottom-nav">
+    <a href="javascript:void(0)" class="bottom-nav-item active" onclick="SSC_loadStudentPage('home')" id="bn-home"><i class="fa-solid fa-house"></i><span>Beranda</span></a>
+    <a href="javascript:void(0)" class="bottom-nav-item" onclick="SSC_loadStudentPage('ajukan')" id="bn-ajukan"><i class="fa-solid fa-paper-plane"></i><span>Ajukan</span></a>
+    <a href="javascript:void(0)" class="bottom-nav-item" onclick="SSC_loadStudentPage('pengajuan')" id="bn-pengajuan"><i class="fa-solid fa-list"></i><span>Riwayat</span></a>
+    <a href="javascript:void(0)" class="bottom-nav-item" onclick="SSC_loadStudentPage('dokumen')" id="bn-dokumen"><i class="fa-solid fa-file-pdf"></i><span>Dokumen</span></a>
+    <a href="javascript:void(0)" class="bottom-nav-item" onclick="SSC_loadStudentPage('profil')" id="bn-profil"><i class="fa-solid fa-user"></i><span>Profil</span></a>
+  </nav>
+</div>
+
+<!-- ATTACHMENT PREVIEW MODAL -->
+<div id="previewDocModalBackdrop" onclick="if(event.target===this) closeDocModal();" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,0.75);z-index:999999;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div class="modal-preview-box">
+    <div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
+      <div class="d-flex align-items-center gap-2 overflow-hidden">
+        <div class="service-icon-badge svc-orange" style="width:34px;height:34px;font-size:.85rem;flex-shrink:0;">
+          <i class="fa-solid fa-paperclip"></i>
+        </div>
+        <div class="overflow-hidden">
+          <h6 class="fw-bold mb-0 text-truncate" id="previewModalTitle" style="color:var(--ink-900);">Berkas Pendukung</h6>
+          <small class="text-muted" style="font-size:.72rem;">Pratinjau Dokumen Unggahan Siswa</small>
+        </div>
+      </div>
+      <button type="button" class="btn-close shadow-none" onclick="closeDocModal()"></button>
+    </div>
+    <div class="p-3 text-center overflow-auto flex-grow-1" id="previewModalBody" style="background:#f8fafc;min-height:280px;display:flex;align-items:center;justify-content:center;">
+      <!-- Image or Document preview rendered here -->
+    </div>
+    <div class="p-3 border-top d-flex justify-content-between align-items-center bg-white gap-2">
+      <a href="#" target="_blank" id="previewModalExternalLink" class="btn btn-sm btn-outline-primary">
+        <i class="fa-solid fa-up-right-from-square me-1"></i> Buka Ukuran Penuh
+      </a>
+      <button type="button" class="btn btn-sm btn-secondary px-3" onclick="closeDocModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   STUDENT DASHBOARD ENGINE (FULL SYNC + ATTACHMENT UPLOAD)
+================================================================ */
+(function() {
+  var session, db, config;
+  var selectedAttachment = null;
+
+  function safeBadgeClass(status) {
+    if (window.SSC && typeof SSC.statusBadgeClass === 'function') {
+      return SSC.statusBadgeClass(status);
+    }
+    var s = String(status || '').toUpperCase();
+    if (s === 'SELESAI') return 'badge-selesai';
+    if (s === 'DISETUJUI') return 'badge-disetujui';
+    if (s === 'DIPROSES') return 'badge-diproses';
+    if (s === 'DIVERIFIKASI') return 'badge-diverifikasi';
+    if (s === 'DITOLAK') return 'badge-ditolak';
+    return 'badge-menunggu';
+  }
+
+  function ensureDatabase() {
+    if (window.SSC && SSC.db) {
+      db = SSC.db;
+    } else {
+      try {
+        var stored = localStorage.getItem("ssc_dummy_database");
+        if (stored) db = JSON.parse(stored);
+      } catch(e) {}
+      if (!db) db = {};
+    }
+    if (!Array.isArray(db.submissions)) {
+      db.submissions = [
+        { submission_id: 'REQ-2026-001', request_id: 'REQ-2026-001', student_id: 'STD-2026-001', student_name: 'Arbi Pratama', student_class: 'XII RPL 1', service_id: 'SRV-AKTIF', service_name: 'Surat Keterangan Siswa Aktif', submission_date: '2026-09-20 08:30', status: 'SELESAI', notes: 'Untuk tunjangan BPJS orang tua', attachment_url: '', document_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', admin_note: 'Dokumen telah disahkan dan ditandatangani digital.' },
+        { submission_id: 'REQ-2026-002', request_id: 'REQ-2026-002', student_id: 'STD-2026-001', student_name: 'Arbi Pratama', student_class: 'XII RPL 1', service_id: 'SRV-MAGANG', service_name: 'Surat Pengantar PKL / Magang', submission_date: '2026-09-21 10:15', status: 'DIPROSES', notes: 'Penempatan di PT Telkom Indonesia', attachment_url: '', document_url: '', admin_note: 'Menunggu validasi program studi.' }
+      ];
+    }
+    if (!Array.isArray(db.requests)) {
+      db.requests = db.submissions;
+    }
+    if (!Array.isArray(db.students)) {
+      db.students = [
+        { student_id: 'STD-2026-001', nis: '2122101', nisn: '0051289110', name: 'Arbi Pratama', class: 'XII Rekayasa Perangkat Lunak 1', major: 'RPL', email: 'arbi.pratama@student.sch.id', phone: '081234567890', status: 'Aktif' }
+      ];
+    }
+    if (!Array.isArray(db.services)) {
+      db.services = [
+        { service_id: 'SRV-AKTIF', service_name: 'Surat Keterangan Siswa Aktif', estimated_days: 1, status: 'active' },
+        { service_id: 'SRV-MAGANG', service_name: 'Surat Pengantar PKL / Magang', estimated_days: 2, status: 'active' },
+        { service_id: 'SRV-REKOM', service_name: 'Surat Rekomendasi Beasiswa', estimated_days: 2, status: 'active' },
+        { service_id: 'SRV-LEGALISIR', service_name: 'Permohonan Legalisir Dokumen', estimated_days: 2, status: 'active' }
+      ];
+    }
+    if (!Array.isArray(db.notifications)) {
+      db.notifications = [
+        { id: 'NOTIF-01', recipient_id: 'STD-2026-001', type: 'success', title: 'Surat Keterangan Aktif Telah Terbit', message: 'Dokumen PDF resmi sudah dapat diunduh.', is_read: false, created_at: '2026-09-20 14:00' },
+        { id: 'NOTIF-02', recipient_id: 'STD-2026-001', type: 'info', title: 'Pengajuan Magang Sedang Diverifikasi', message: 'Staf Tata Usaha sedang memeriksa kelengkapan.', is_read: false, created_at: '2026-09-21 11:30' }
+      ];
+    }
+    if (!Array.isArray(db.documents)) {
+      db.documents = [
+        { document_id: 'DOC-01', submission_id: 'REQ-2026-001', document_name: 'Surat Keterangan Aktif - Arbi Pratama', service_name: 'Surat Keterangan Siswa Aktif', pdf_url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', created_at: '2026-09-20 14:00' }
+      ];
+    }
+    if (!Array.isArray(db.activity_logs)) {
+      db.activity_logs = [];
+    }
+  }
+
+  function persistDatabase() {
+    if (window.SSC && typeof SSC.saveDatabase === 'function') {
+      SSC.saveDatabase();
+    } else {
+      try {
+        localStorage.setItem("ssc_dummy_database", JSON.stringify(db));
+      } catch(e) {}
+    }
+    try {
+      window.dispatchEvent(new CustomEvent('ssc_db_updated', { detail: db }));
+    } catch(e) {}
+  }
+
+  window.previewDocModal = function(url, title) {
+    var rawUrl = decodeURIComponent(url || '');
+    var rawTitle = decodeURIComponent(title || 'Berkas Pendukung');
+    if (!rawUrl) {
+      if (window.SSC && SSC.showToast) SSC.showToast('Berkas tidak tersedia.', 'warning');
+      return;
+    }
+    var modal = document.getElementById('previewDocModalBackdrop');
+    var titleEl = document.getElementById('previewModalTitle');
+    var bodyEl = document.getElementById('previewModalBody');
+    var linkEl = document.getElementById('previewModalExternalLink');
+    if (!modal || !bodyEl) return;
+
+    if (titleEl) titleEl.textContent = rawTitle;
+    if (linkEl) linkEl.href = rawUrl;
+
+    var isImg = rawUrl.indexOf('data:image/') === 0 || rawUrl.match(/\.(jpeg|jpg|png|gif|webp)(\?.*)?$/i);
+    if (isImg) {
+      bodyEl.innerHTML = '<div class="text-center p-2"><img src="' + rawUrl + '" alt="' + rawTitle + '" style="max-width:100%;max-height:65vh;object-fit:contain;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);"></div>';
+    } else {
+      bodyEl.innerHTML = '<div class="w-100 text-center py-4">'+
+        '<i class="fa-solid fa-file-pdf fa-4x text-danger mb-3"></i>'+
+        '<h6 class="fw-bold mb-2">Dokumen Berkas Terlampir</h6>'+
+        '<p class="small text-muted mb-4">Berkas berformat PDF siap dibuka atau diunduh.</p>'+
+        '<a href="' + rawUrl + '" target="_blank" class="btn btn-navy"><i class="fa-solid fa-arrow-up-right-from-square me-2"></i> Buka Dokumen di Tab Baru</a>'+
+        '</div>';
+    }
+    modal.style.display = 'flex';
+  };
+
+  window.closeDocModal = function() {
+    var modal = document.getElementById('previewDocModalBackdrop');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.refreshStudentData = function() {
+    var icon = document.getElementById('sync-icon-student');
+    if (icon) icon.classList.add('fa-spin');
+    if (window.SSC && typeof SSC.callGAS === 'function') {
+      SSC.callGAS("syncAll").then(function(res) {
+        if (icon) icon.classList.remove('fa-spin');
+        if (res && res.status === "success" && res.data) {
+          if (Array.isArray(res.data.submissions)) db.submissions = res.data.submissions;
+          if (Array.isArray(res.data.notifications)) db.notifications = res.data.notifications;
+          if (Array.isArray(res.data.documents)) db.documents = res.data.documents;
+          persistDatabase();
+          var p = getCurrentActivePage();
+          SSC_loadStudentPage(p);
+          if (window.SSC && SSC.showToast) SSC.showToast('Data berhasil disinkronkan!', 'success');
+        }
+      }).catch(function(e) {
+        if (icon) icon.classList.remove('fa-spin');
+        ensureDatabase();
+        var p = getCurrentActivePage();
+        SSC_loadStudentPage(p);
+      });
+    } else {
+      setTimeout(function(){
+        if (icon) icon.classList.remove('fa-spin');
+        ensureDatabase();
+        var p = getCurrentActivePage();
+        SSC_loadStudentPage(p);
+      }, 350);
+    }
+  };
+
+  function getCurrentActivePage() {
+    var activeNav = document.querySelector('.bottom-nav-item.active') || document.querySelector('.app-sidebar .nav-link.active');
+    if (!activeNav) return 'home';
+    if (activeNav.id.indexOf('bn-') === 0) return activeNav.id.replace('bn-', '');
+    if (activeNav.id.indexOf('nav-s-') === 0) return activeNav.id.replace('nav-s-', '');
+    return 'home';
+  }
+
+  // Cross-Tab Real-Time Sync Listener
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'ssc_dummy_database' && e.newValue) {
+      try {
+        var fresh = JSON.parse(e.newValue);
+        if (fresh && Array.isArray(fresh.submissions)) {
+          db = fresh;
+          if (window.SSC) SSC.db = db;
+          SSC_loadStudentPage(getCurrentActivePage());
+        }
+      } catch(err){}
+    }
+  });
+
+  window.addEventListener('ssc_db_updated', function(e) {
+    if (e.detail && Array.isArray(e.detail.submissions)) {
+      db = e.detail;
+      SSC_loadStudentPage(getCurrentActivePage());
+    }
+  });
+
+  window.SSC_pageInit = function(s, d, c) {
+    document.body.classList.add("page-clean-view");
+    session = s; db = d; config = c;
+
+    // Pastikan session valid untuk siswa demo
+    if (!session || session.role !== 'student') {
+      session = { user_id: 'USR-002', username: 'peserta', role: 'student', name: 'Arbi Pratama', student_id: 'STD-2026-001' };
+      sessionStorage.setItem('ssc_active_session', JSON.stringify(session));
+    }
+
+    ensureDatabase();
+
+    // Isi sidebar info
+    var student = (db.students || []).find(function(x){return x.student_id===session.student_id;}) || (db.students || [])[0] || {};
+    var el = document.getElementById('sidebar-name');
+    if(el) el.textContent = session.name || student.name || 'Arbi Pratama';
+    el = document.getElementById('sidebar-class');
+    if(el) el.textContent = student.class || 'XII Rekayasa Perangkat Lunak 1';
+    el = document.getElementById('sidebar-avatar');
+    if(el) el.textContent = (session.name||'AP').split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+
+    updateNotifBadge();
+    SSC_loadStudentPage('home');
+
+    // Live background sync
+    if (window.SSC && typeof SSC.callGAS === 'function') {
+      SSC.callGAS("syncAll").then(function(res) {
+        if (res && res.status === "success" && res.data && Array.isArray(res.data.submissions)) {
+          db.submissions = res.data.submissions;
+          if (Array.isArray(res.data.notifications)) db.notifications = res.data.notifications;
+          if (Array.isArray(res.data.documents)) db.documents = res.data.documents;
+          persistDatabase();
+          SSC_loadStudentPage(getCurrentActivePage());
+        }
+      }).catch(function(e){ console.info("Local mode active for dashboard:", e); });
+    }
+  };
+
+  function updateNotifBadge() {
+    var notifs = Array.isArray(db.notifications) ? db.notifications : [];
+    var unread = notifs.filter(function(n){return !n.is_read && n.recipient_id===session.student_id;}).length;
+    var badge = document.getElementById('notif-badge');
+    if(badge){
+      badge.textContent = unread || 0;
+      badge.style.display = unread > 0 ? 'flex' : 'none';
+    }
+  }
+
+  window.SSC_loadStudentPage = function(page) {
+    ensureDatabase();
+    updateNotifBadge();
+
+    // Auto close drawer on mobile when clicking navigation
+    if (window.innerWidth < 992 && window.SSC && typeof SSC.closeSidebar === 'function') {
+      SSC.closeSidebar();
+    }
+
+    // Update active state
+    ['home','ajukan','pengajuan','dokumen','profil'].forEach(function(p) {
+      var sb = document.getElementById('nav-s-'+p);
+      var bn = document.getElementById('bn-'+p);
+      if(sb) sb.classList.toggle('active', p===page);
+      if(bn) bn.classList.toggle('active', p===page);
+    });
+
+    var titles = {home:'Beranda Siswa',ajukan:'Ajukan Layanan Baru',pengajuan:'Riwayat Pengajuan',dokumen:'Dokumen Saya',profil:'Profil Saya'};
+    var hdr = document.getElementById('page-title-header');
+    if(hdr) hdr.textContent = titles[page]||'Dashboard Siswa';
+
+    var area = document.getElementById('student-content-area');
+    if(!area) return;
+
+    if(page==='home') renderHome(area);
+    else if(page==='ajukan') renderAjukan(area);
+    else if(page==='pengajuan') renderPengajuan(area);
+    else if(page==='dokumen') renderDokumen(area);
+    else if(page==='profil') renderProfil(area);
+  };
+
+  function getMySubmissions() {
+    ensureDatabase();
+    var list = Array.isArray(db.submissions) ? db.submissions : (Array.isArray(db.requests) ? db.requests : []);
+    var mySubs = list.filter(function(s){return s.student_id===session.student_id;});
+    return mySubs.length > 0 ? mySubs : list;
+  }
+
+  function renderHome(area) {
+    var subs = getMySubmissions();
+    var pending = subs.filter(function(s){return ['MENUNGGU','DIVERIFIKASI','DIPROSES'].includes(s.status);}).length;
+    var selesai = subs.filter(function(s){return s.status==='SELESAI';}).length;
+    var notifs = Array.isArray(db.notifications) ? db.notifications : [];
+
+    area.innerHTML = '<div class="row g-3 g-md-4">'+
+      '<div class="col-12"><div class="p-3 p-md-4 rounded-4 text-white" style="background:linear-gradient(135deg,var(--orange-500) 0%,var(--orange-600) 100%);box-shadow:0 20px 40px -15px rgba(255,107,53,.6);">'+
+      '<div class="row align-items-center g-3"><div class="col-md-8"><h5 class="fw-bold mb-1 fs-5 fs-md-4">Halo, '+(session.name||'Arbi Pratama')+'! 👋</h5><p class="mb-3 opacity-90 small">Selamat datang di portal Student Service Center. Ajukan permohonan surat kesiswaan dengan mudah, pantau progres, dan unduh dokumen resmi secara digital.</p>'+
+      '<div class="d-flex gap-2 flex-wrap">'+
+      '<button class="btn btn-white btn-sm px-3 fw-bold" onclick="SSC_loadStudentPage(\'ajukan\')"><i class="fa-solid fa-paper-plane me-1"></i> Ajukan Layanan</button>'+
+      '<button class="btn btn-sm px-3 fw-bold" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:10px;" onclick="SSC_loadStudentPage(\'pengajuan\')"><i class="fa-solid fa-clock-rotate-left me-1"></i> Riwayat Pengajuan</button>'+
+      '</div></div>'+
+      '<div class="col-md-4 d-none d-md-flex justify-content-end"><div class="text-center" style="opacity:.85;"><i class="fa-solid fa-graduation-cap" style="font-size:5rem;"></i></div></div></div></div></div>'+
+
+      '<div class="col-6 col-md-3"><div class="card-modern p-3 p-md-4 h-100">'+
+      '<div class="d-flex align-items-center gap-2 gap-md-3 mb-2"><div class="service-icon-badge svc-orange" style="width:38px;height:38px;font-size:.9rem;"><i class="fa-solid fa-folder-open"></i></div><div class="fw-bold text-muted small" style="font-size:.78rem;">Total Pengajuan</div></div>'+
+      '<h2 class="fw-bold mb-0 fs-4 fs-md-2" style="color:var(--ink-900);">'+subs.length+'</h2></div></div>'+
+
+      '<div class="col-6 col-md-3"><div class="card-modern p-3 p-md-4 h-100">'+
+      '<div class="d-flex align-items-center gap-2 gap-md-3 mb-2"><div class="service-icon-badge svc-yellow" style="width:38px;height:38px;font-size:.9rem;"><i class="fa-solid fa-hourglass-half"></i></div><div class="fw-bold text-muted small" style="font-size:.78rem;">Dalam Proses</div></div>'+
+      '<h2 class="fw-bold mb-0 fs-4 fs-md-2" style="color:var(--ink-900);">'+pending+'</h2></div></div>'+
+
+      '<div class="col-6 col-md-3"><div class="card-modern p-3 p-md-4 h-100">'+
+      '<div class="d-flex align-items-center gap-2 gap-md-3 mb-2"><div class="service-icon-badge svc-green" style="width:38px;height:38px;font-size:.9rem;"><i class="fa-solid fa-circle-check"></i></div><div class="fw-bold text-muted small" style="font-size:.78rem;">Selesai</div></div>'+
+      '<h2 class="fw-bold mb-0 fs-4 fs-md-2" style="color:var(--ink-900);">'+selesai+'</h2></div></div>'+
+
+      '<div class="col-6 col-md-3"><div class="card-modern p-3 p-md-4 h-100">'+
+      '<div class="d-flex align-items-center gap-2 gap-md-3 mb-2"><div class="service-icon-badge svc-purple" style="width:38px;height:38px;font-size:.9rem;"><i class="fa-solid fa-bell"></i></div><div class="fw-bold text-muted small" style="font-size:.78rem;">Notifikasi</div></div>'+
+      '<h2 class="fw-bold mb-0 fs-4 fs-md-2" style="color:var(--ink-900);">'+notifs.length+'</h2></div></div>'+
+
+      '<div class="col-lg-8"><div class="card-modern p-3 p-md-4"><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="fw-bold mb-0" style="color:var(--ink-900);">Pengajuan Terbaru</h6><button class="btn btn-sm btn-link text-decoration-none" onclick="SSC_loadStudentPage(\'pengajuan\')">Lihat Semua <i class="fa-solid fa-arrow-right ms-1"></i></button></div>'+
+      (subs.length===0 ? '<div class="text-center py-4"><i class="fa-solid fa-inbox fa-2x mb-2" style="color:var(--ink-300);"></i><p class="small" style="color:var(--ink-400);">Belum ada pengajuan.</p><button class="btn btn-navy btn-sm" onclick="SSC_loadStudentPage(\'ajukan\')">Ajukan Sekarang</button></div>' :
+      '<div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr><th>No. Tiket</th><th>Layanan</th><th>Tanggal</th><th>Berkas</th><th>Status</th><th>Aksi</th></tr></thead><tbody>'+
+      subs.slice(0,4).map(function(s){
+        var ticket = s.submission_id || s.request_id;
+        var attachBtn = s.attachment_url ?
+          '<button class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size:.72rem;" onclick="previewDocModal(\''+encodeURIComponent(s.attachment_url)+'\', \''+encodeURIComponent((s.attachment_name||'Berkas Pendukung') + ' ('+ticket+')')+'\')"><i class="fa-solid fa-paperclip"></i> Lihat</button>' :
+          '<span class="text-muted" style="font-size:.75rem;">-</span>';
+        return '<tr><td><code style="color:var(--orange-700);font-size:.8rem;font-weight:700;">'+ticket+'</code></td>'+
+          '<td class="small fw-semibold" style="max-width:180px;">'+s.service_name+'</td>'+
+          '<td class="small" style="color:var(--ink-500);">'+String(s.submission_date||s.submit_date||'').split(' ')[0]+'</td>'+
+          '<td>'+attachBtn+'</td>'+
+          '<td><span class="status-badge '+safeBadgeClass(s.status)+'">'+s.status+'</span></td>'+
+          '<td>'+(s.status==='SELESAI'?'<a href="'+(s.document_url||s.drive_url||'#')+'" target="_blank" class="btn btn-sm btn-navy py-1 px-2" style="font-size:.75rem;"><i class="fa-solid fa-download"></i> PDF</a>':'<button class="btn btn-sm btn-outline-navy py-1 px-2" style="font-size:.75rem;" onclick="SSC_loadStudentPage(\'pengajuan\')">Detail</button>')+'</td></tr>';
+      }).join('')+
+      '</tbody></table></div>')+
+      '</div></div>'+
+
+      '<div class="col-lg-4"><div class="card-modern p-4"><h6 class="fw-bold mb-3" style="color:var(--ink-900);">Pemberitahuan</h6>'+
+      notifs.slice(0,4).map(function(n){
+        return '<div class="d-flex gap-3 py-2" style="border-bottom:1px solid var(--ink-100);">'+
+          '<div class="service-icon-badge '+(n.type==='success'?'svc-green':n.type==='info'?'svc-blue':'svc-yellow')+'" style="width:34px;height:34px;font-size:.75rem;flex-shrink:0;"><i class="fa-solid '+(n.type==='success'?'fa-check':n.type==='info'?'fa-info':'fa-exclamation')+'"></i></div>'+
+          '<div><div class="small fw-semibold" style="color:var(--ink-900);">'+n.title+'</div>'+
+          '<p class="mb-0 text-muted" style="font-size:.72rem;">'+n.message+'</p>'+
+          '<div style="font-size:.68rem;color:var(--ink-400);">'+String(n.created_at||'').split(' ')[0]+'</div></div></div>';
+      }).join('')||'<p class="text-center small py-3" style="color:var(--ink-400);">Tidak ada notifikasi baru.</p>'+
+      '</div></div></div>';
+
+    if(window.SSC&&SSC.setupReveal) SSC.setupReveal();
+  }
+
+  function renderAjukan(area) {
+    var services = Array.isArray(db.services) ? db.services : [];
+    selectedAttachment = null;
+
+    area.innerHTML = '<div class="card-modern p-4 p-md-5 mb-4">'+
+      '<div class="d-flex align-items-center gap-3 mb-4"><div class="service-icon-badge svc-orange"><i class="fa-solid fa-paper-plane"></i></div>'+
+      '<div><h5 class="fw-bold mb-0" style="color:var(--ink-900);">Form Pengajuan Surat Kesiswaan</h5><p class="mb-0 small" style="color:var(--ink-500);">Lengkapi formulir di bawah ini. Anda dapat mengunggah berkas pendukung foto atau PDF untuk mempercepat verifikasi staf Tata Usaha.</p></div></div>'+
+      '<form id="form-ajukan" onsubmit="submitAjukan(event)">'+
+      '<div class="row g-3">'+
+      '<div class="col-md-6"><label class="form-label fw-semibold small">Nama Lengkap Siswa</label><input type="text" class="form-control" value="'+(session.name||'Arbi Pratama')+'" readonly style="background:var(--ink-50);"></div>'+
+      '<div class="col-md-6"><label class="form-label fw-semibold small">NIS</label><input type="text" class="form-control" value="2122101" readonly style="background:var(--ink-50);"></div>'+
+      '<div class="col-12"><label class="form-label fw-semibold small">Pilih Jenis Layanan <span class="text-danger">*</span></label>'+
+      '<select class="form-select" id="select-service" required>'+
+      '<option value="">-- Pilih Jenis Layanan --</option>'+
+      services.filter(function(s){return s.status==="active";}).map(function(s){return '<option value="'+s.service_id+'">'+s.service_name+' ('+s.estimated_days+' hari kerja)</option>';}).join('')+
+      '</select></div>'+
+      '<div class="col-12"><label class="form-label fw-semibold small">Keperluan / Keterangan Tambahan <span class="text-danger">*</span></label>'+
+      '<textarea class="form-control" id="input-purpose" required rows="4" placeholder="Tuliskan secara jelas keperluan pengajuan surat ini (misal: pengajuan tunjangan BPJS orang tua, beasiswa luar negeri, pendaftaran magang, dsb)..."></textarea></div>'+
+
+      '<!-- FILE UPLOAD DROPZONE -->'+
+      '<div class="col-12">'+
+      '<label class="form-label fw-semibold small">Unggah Berkas Pendukung (Foto / Dokumen PDF)</label>'+
+      '<div id="dropzone-box" class="p-4 rounded-3 text-center position-relative" style="border:2px dashed var(--orange-300);background:var(--orange-50);cursor:pointer;transition:all .2s ease;" onclick="document.getElementById(\'file-input\').click()">'+
+      '<input type="file" id="file-input" class="d-none" accept=".pdf,.jpg,.jpeg,.png,.webp" onchange="handleFileSelected(this)">'+
+      '<div id="dropzone-prompt">'+
+      '<i class="fa-solid fa-cloud-arrow-up fa-2x mb-2" style="color:var(--orange-500);"></i>'+
+      '<p class="mb-1 small fw-bold" style="color:var(--ink-800);">Klik untuk memilih foto atau dokumen berkas</p>'+
+      '<span class="text-muted" style="font-size:.75rem;">Mendukung format JPG, PNG, WEBP, atau PDF (Maksimal 5MB)</span>'+
+      '</div>'+
+      '<!-- Preview Card -->'+
+      '<div id="file-preview-card" class="d-none text-start p-3 bg-white rounded-3 shadow-sm border mt-1">'+
+      '<div class="d-flex align-items-center justify-content-between gap-3">'+
+      '<div class="d-flex align-items-center gap-3 overflow-hidden">'+
+      '<div id="file-preview-icon" style="width:52px;height:52px;flex-shrink:0;border-radius:8px;overflow:hidden;background:var(--ink-100);display:flex;align-items:center;justify-content:center;"></div>'+
+      '<div class="overflow-hidden">'+
+      '<div id="file-preview-name" class="fw-bold small text-truncate" style="color:var(--ink-900);">nama-berkas.jpg</div>'+
+      '<div id="file-preview-size" class="text-muted" style="font-size:.72rem;">0 KB</div>'+
+      '<span class="badge bg-success" style="font-size:.65rem;"><i class="fa-solid fa-circle-check me-1"></i>Berkas Siap Diunggah</span>'+
+      '</div>'+
+      '</div>'+
+      '<button type="button" class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); removeAttachment();" title="Hapus Berkas"><i class="fa-solid fa-trash me-1"></i> Hapus</button>'+
+      '</div></div>'+
+      '</div>'+
+      '<small class="text-muted" style="font-size:.72rem;"><i class="fa-solid fa-circle-info me-1"></i> Berkas akan disimpan dan dapat diperiksa langsung oleh staf Tata Usaha pada saat verifikasi.</small>'+
+      '</div>'+
+
+      '<div class="col-12 d-flex gap-2 flex-wrap mt-4">'+
+      '<button type="submit" class="btn btn-navy px-4" id="btn-ajukan-submit"><i class="fa-solid fa-paper-plane me-2"></i> Kirim Permohonan</button>'+
+      '<button type="button" class="btn btn-light px-4" onclick="SSC_loadStudentPage(\'ajukan\')">Reset</button>'+
+      '</div></div></form></div>';
+
+    // Drag and drop event listeners
+    var dropzone = document.getElementById('dropzone-box');
+    if (dropzone) {
+      ['dragenter', 'dragover'].forEach(function(evt) {
+        dropzone.addEventListener(evt, function(e) {
+          e.preventDefault(); e.stopPropagation();
+          dropzone.classList.add('dropzone-active');
+        }, false);
+      });
+      ['dragleave', 'drop'].forEach(function(evt) {
+        dropzone.addEventListener(evt, function(e) {
+          e.preventDefault(); e.stopPropagation();
+          dropzone.classList.remove('dropzone-active');
+        }, false);
+      });
+      dropzone.addEventListener('drop', function(e) {
+        var dt = e.dataTransfer;
+        var files = dt.files;
+        if (files && files.length > 0) {
+          var input = document.getElementById('file-input');
+          input.files = files;
+          handleFileSelected(input);
+        }
+      }, false);
+    }
+
+    window.handleFileSelected = function(input) {
+      if (!input.files || !input.files[0]) return;
+      var file = input.files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        if (window.SSC && SSC.showToast) SSC.showToast('Ukuran file melebihi batas maksimal 5MB! Silakan pilih file yang lebih kecil.', 'warning');
+        else alert('Ukuran file maksimal 5MB!');
+        input.value = '';
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var dataUrl = e.target.result;
+        selectedAttachment = {
+          file: file,
+          name: file.name,
+          size: (file.size / 1024).toFixed(1) + ' KB',
+          type: file.type,
+          dataUrl: dataUrl
+        };
+
+        var promptEl = document.getElementById('dropzone-prompt');
+        var cardEl = document.getElementById('file-preview-card');
+        var iconEl = document.getElementById('file-preview-icon');
+        var nameEl = document.getElementById('file-preview-name');
+        var sizeEl = document.getElementById('file-preview-size');
+
+        if (promptEl) promptEl.classList.add('d-none');
+        if (cardEl) cardEl.classList.remove('d-none');
+        if (nameEl) nameEl.textContent = file.name;
+        if (sizeEl) sizeEl.textContent = selectedAttachment.size;
+
+        if (iconEl) {
+          if (file.type.indexOf('image/') === 0) {
+            iconEl.innerHTML = '<img src="' + dataUrl + '" alt="Preview" style="width:100%;height:100%;object-fit:cover;">';
+          } else {
+            iconEl.innerHTML = '<i class="fa-solid fa-file-pdf fa-2x" style="color:var(--orange-600);"></i>';
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+    window.removeAttachment = function() {
+      selectedAttachment = null;
+      var input = document.getElementById('file-input');
+      if (input) input.value = '';
+      var promptEl = document.getElementById('dropzone-prompt');
+      var cardEl = document.getElementById('file-preview-card');
+      if (promptEl) promptEl.classList.remove('d-none');
+      if (cardEl) cardEl.classList.add('d-none');
+    };
+
+    window.submitAjukan = function(event) {
+      event.preventDefault();
+      var svcId = document.getElementById('select-service').value;
+      var purpose = document.getElementById('input-purpose').value.trim();
+      if(!svcId || !purpose){
+        if (window.SSC && SSC.showToast) SSC.showToast('Lengkapi semua kolom bertanda bintang!', 'warning');
+        return;
+      }
+
+      var btn = document.getElementById('btn-ajukan-submit');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Mengunggah berkas & memproses...';
+
+      var svc = (db.services || []).find(function(s){return s.service_id===svcId;}) || { service_name: 'Surat Keterangan' };
+      var student = (db.students || []).find(function(x){return x.student_id===session.student_id;}) || {};
+      var newId = 'SSC-2026-' + (Math.floor(10000 + Math.random() * 89999));
+      var now = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
+      function finalizeSubmission(attachmentUrl) {
+        var subRecord = {
+          submission_id: newId,
+          request_id: newId,
+          student_id: session.student_id || 'STD-2026-001',
+          student_name: session.name || student.name || 'Arbi Pratama',
+          student_class: student.class || 'XII Rekayasa Perangkat Lunak 1',
+          service_id: svcId,
+          service_name: svc.service_name,
+          submission_date: now,
+          purpose: purpose,
+          attachment_url: attachmentUrl || '',
+          attachment_name: selectedAttachment ? selectedAttachment.name : '',
+          status: 'MENUNGGU',
+          notes: purpose,
+          document_url: '',
+          admin_note: 'Menunggu verifikasi staf TU.',
+          updated_at: now
+        };
+
+        // Simpan ke database lokal
+        if (!Array.isArray(db.submissions)) db.submissions = [];
+        if (!Array.isArray(db.requests)) db.requests = [];
+        db.submissions.unshift(subRecord);
+        db.requests.unshift(subRecord);
+
+        // Tambah notifikasi dan activity log
+        if (!Array.isArray(db.notifications)) db.notifications = [];
+        db.notifications.unshift({
+          id: 'NOTIF-' + Date.now(),
+          recipient_id: subRecord.student_id,
+          type: 'info',
+          title: 'Permohonan Berhasil Dikirim',
+          message: 'Tiket ' + newId + ' (' + subRecord.service_name + ') sedang menunggu verifikasi staf TU.',
+          is_read: false,
+          created_at: now
+        });
+
+        if (!Array.isArray(db.activity_logs)) db.activity_logs = [];
+        db.activity_logs.unshift({
+          timestamp: now,
+          user: subRecord.student_name,
+          role: 'Siswa',
+          action: 'Pengajuan Baru',
+          description: 'Mengajukan ' + subRecord.service_name + ' (' + newId + ')'
+        });
+
+        // Persist ke localStorage & trigger sinkronisasi tab
+        persistDatabase();
+
+        // Kirim ke Google Apps Script backend jika online
+        if (window.SSC && typeof SSC.callGAS === 'function') {
+          SSC.callGAS("createSubmission", { data: subRecord }).catch(function(e){ console.warn("Live GAS createSubmission fallback:", e); });
+        }
+
+        setTimeout(function() {
+          if (window.SSC && SSC.showToast) SSC.showToast('Permohonan berhasil diajukan! Nomor Tiket: ' + newId, 'success');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i> Kirim Permohonan';
+          selectedAttachment = null;
+          SSC_loadStudentPage('pengajuan');
+        }, 500);
+      }
+
+      // Jika ada lampiran berkas
+      if (selectedAttachment && selectedAttachment.dataUrl) {
+        var rawBase64 = selectedAttachment.dataUrl.split(',')[1] || selectedAttachment.dataUrl;
+        if (window.SSC && typeof SSC.callGAS === 'function') {
+          SSC.callGAS("uploadAttachment", {
+            filename: selectedAttachment.name,
+            mimeType: selectedAttachment.type,
+            base64Data: rawBase64,
+            submission_id: newId
+          }).then(function(upRes) {
+            var driveUrl = (upRes && (upRes.download_url || upRes.file_url)) ? (upRes.download_url || upRes.file_url) : selectedAttachment.dataUrl;
+            finalizeSubmission(driveUrl);
+          }).catch(function() {
+            // Gunakan base64 lokal jika offline
+            finalizeSubmission(selectedAttachment.dataUrl);
+          });
+        } else {
+          finalizeSubmission(selectedAttachment.dataUrl);
+        }
+      } else {
+        finalizeSubmission('');
+      }
+    };
+  }
+
+  function renderPengajuan(area) {
+    var subs = getMySubmissions();
+    area.innerHTML = '<div class="card-modern p-3 p-md-4">'+
+      '<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">'+
+      '<h6 class="fw-bold mb-0" style="color:var(--ink-900);">Riwayat Pengajuan Surat Saya ('+subs.length+')</h6>'+
+      '<button class="btn btn-navy btn-sm" onclick="SSC_loadStudentPage(\'ajukan\')"><i class="fa-solid fa-plus me-1"></i> Ajukan Baru</button>'+
+      '</div>'+
+      (subs.length===0 ? '<div class="text-center py-5"><i class="fa-solid fa-inbox fa-2x mb-2" style="color:var(--ink-300);"></i><p class="small" style="color:var(--ink-400);">Belum ada riwayat pengajuan surat.</p><button class="btn btn-navy btn-sm" onclick="SSC_loadStudentPage(\'ajukan\')">Ajukan Sekarang</button></div>' :
+      '<div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr><th>No. Tiket</th><th>Jenis Layanan</th><th>Tanggal</th><th>Berkas Lampiran</th><th>Status</th><th>Catatan TU</th><th>Aksi</th></tr></thead><tbody>'+
+      subs.map(function(s){
+        var ticketId = s.submission_id || s.request_id;
+        var attachBtn = s.attachment_url ?
+          '<button class="btn btn-sm btn-outline-primary py-1 px-2 text-nowrap" style="font-size:.78rem;" onclick="previewDocModal(\''+encodeURIComponent(s.attachment_url)+'\', \''+encodeURIComponent((s.attachment_name||'Berkas Pendukung') + ' ('+ticketId+')')+'\')"><i class="fa-solid fa-paperclip me-1"></i> Lihat Berkas</button>' :
+          '<span class="text-muted small">-</span>';
+
+        return '<tr><td><code style="color:var(--orange-700);font-weight:700;font-size:.82rem;">'+ticketId+'</code></td>'+
+          '<td class="small fw-semibold" style="max-width:180px;">'+s.service_name+'</td>'+
+          '<td class="small text-nowrap" style="color:var(--ink-500);">'+String(s.submission_date||s.submit_date||'').split(' ')[0]+'</td>'+
+          '<td>'+attachBtn+'</td>'+
+          '<td><span class="status-badge text-nowrap '+safeBadgeClass(s.status)+'">'+s.status+'</span></td>'+
+          '<td class="small" style="color:var(--ink-500);max-width:160px;">'+(s.admin_note||'-')+'</td>'+
+          '<td class="d-flex gap-1 flex-nowrap">'+
+          (s.status==='SELESAI'?'<a href="'+(s.document_url||s.drive_url||'#')+'" target="_blank" class="btn btn-sm btn-navy py-1 px-2 text-nowrap" style="font-size:.78rem;"><i class="fa-solid fa-download"></i> PDF</a>':'')+
+          '<a href="/p/cek-pengajuan.html?ticket='+ticketId+'" class="btn btn-sm btn-outline-navy py-1 px-2 text-nowrap" style="font-size:.78rem;">Lacak</a></td></tr>';
+      }).join('')+
+      '</tbody></table></div>')+
+      '</div>';
+  }
+
+  function renderDokumen(area) {
+    var docs = Array.isArray(db.documents) ? db.documents : [];
+    area.innerHTML = '<div class="card-modern p-3 p-md-4">'+
+      '<div class="d-flex align-items-center gap-3 mb-4"><div class="service-icon-badge svc-orange"><i class="fa-solid fa-file-pdf"></i></div><div><h6 class="fw-bold mb-0" style="color:var(--ink-900);">Dokumen Resmi &amp; Arsip Digital</h6><p class="mb-0 small" style="color:var(--ink-500);">Seluruh dokumen bertanda tangan digital dan ber-QR Code resmi yang telah terbit siap diunduh.</p></div></div>'+
+      (docs.length===0 ? '<div class="text-center py-5"><i class="fa-solid fa-folder-open fa-2x mb-2" style="color:var(--ink-300);"></i><p class="small" style="color:var(--ink-400);">Belum ada dokumen yang terbit. Silakan lakukan pengajuan surat terlebih dahulu.</p></div>' :
+      '<div class="row g-2 g-md-3">'+docs.map(function(d){return '<div class="col-md-6 col-lg-4"><div class="card-modern p-3 h-100"><div class="d-flex gap-3 align-items-start"><div class="service-icon-badge svc-red" style="width:42px;height:42px;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-file-pdf"></i></div><div><div class="small fw-semibold mb-1" style="color:var(--ink-900);">'+d.document_name+'</div><div style="font-size:.75rem;color:var(--ink-500);">'+d.service_name+'</div><div style="font-size:.7rem;color:var(--ink-400);">'+d.created_at+'</div><a href="'+d.pdf_url+'" target="_blank" class="btn btn-sm btn-navy mt-2 text-nowrap"><i class="fa-solid fa-download me-1"></i> Unduh PDF</a></div></div></div></div>';}).join('')+'</div>')+
+      '</div>';
+  }
+
+  function renderProfil(area) {
+    var students = Array.isArray(db.students) ? db.students : [];
+    var student = students.find(function(x){return x.student_id===session.student_id;}) || students[0] || {};
+    area.innerHTML = '<div class="row g-4">'+
+      '<div class="col-md-4"><div class="card-modern p-4 text-center">'+
+      '<div class="service-icon-badge svc-orange mx-auto mb-3" style="width:80px;height:80px;font-size:2rem;">'+((session.name||'Arbi Pratama').split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase())+'</div>'+
+      '<h5 class="fw-bold mb-1" style="color:var(--ink-900);">'+(session.name||'Arbi Pratama')+'</h5>'+
+      '<p class="small mb-3" style="color:var(--ink-500);">'+(student.class||'XII Rekayasa Perangkat Lunak 1')+'</p>'+
+      '<span class="status-badge badge-selesai">Siswa Aktif Terdaftar</span></div></div>'+
+      '<div class="col-md-8"><div class="card-modern p-4"><h6 class="fw-bold mb-3" style="color:var(--ink-900);">Data Pokok Siswa</h6>'+
+      '<div class="row g-3">'+
+      '<div class="col-md-6"><label class="form-label fw-bold small text-muted">NIS</label><p class="mb-0 fw-semibold" style="color:var(--ink-900);">'+(student.nis||'2122101')+'</p></div>'+
+      '<div class="col-md-6"><label class="form-label fw-bold small text-muted">NISN</label><p class="mb-0 fw-semibold" style="color:var(--ink-900);">'+(student.nisn||'0051289110')+'</p></div>'+
+      '<div class="col-md-6"><label class="form-label fw-bold small text-muted">Kelas</label><p class="mb-0 fw-semibold" style="color:var(--ink-900);">'+(student.class||'XII Rekayasa Perangkat Lunak 1')+'</p></div>'+
+      '<div class="col-md-6"><label class="form-label fw-bold small text-muted">Jurusan / Program Keahlian</label><p class="mb-0 fw-semibold" style="color:var(--ink-900);">'+(student.major||'Rekayasa Perangkat Lunak')+'</p></div>'+
+      '<div class="col-md-6"><label class="form-label fw-bold small text-muted">Email Siswa</label><p class="mb-0 fw-semibold" style="color:var(--ink-900);">'+(student.email||'arbi.pratama@student.sch.id')+'</p></div>'+
+      '<div class="col-md-6"><label class="form-label fw-bold small text-muted">No. Handphone / WhatsApp</label><p class="mb-0 fw-semibold" style="color:var(--ink-900);">'+(student.phone||'081234567890')+'</p></div>'+
+      '</div></div></div></div>';
+  }
+
+  // Trigger self-mounting automatically when loaded
+  setTimeout(function() {
+    var stored = null;
+    try { stored = JSON.parse(sessionStorage.getItem('ssc_active_session')); } catch(e){}
+    var s = stored || { user_id: 'USR-002', username: 'peserta', role: 'student', name: 'Arbi Pratama', student_id: 'STD-2026-001' };
+    var d = (window.SSC && SSC.db) ? SSC.db : null;
+    var c = (window.SSC && SSC.config) ? SSC.config : { PAGES: { login: '/p/login.html' } };
+    window.SSC_pageInit(s, d, c);
+  }, 50);
+
+})();
+</script>

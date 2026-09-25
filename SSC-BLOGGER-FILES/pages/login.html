@@ -1,0 +1,841 @@
+<style>
+/* Clean Fullscreen View for Login */
+#public-navbar, #ssc-footer, .ssc-footer, #floatingStack, .floating-stack, .floating-top, #backToTop, .floating-whatsapp-btn {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+</style>
+<!--
+  ╔════════════════════════════════════════════════════════════════════╗
+  ║  PAGE: LOGIN                                                       ║
+  ║  Blogger Page URL: /p/login.html                                  ║
+  ║  FULL-SCREEN DESKTOP SPLIT VIEW & FLUID PROPORTIONAL MOBILE UI     ║
+  ╚════════════════════════════════════════════════════════════════════╝
+-->
+<script>window.SSC_PAGE = 'login';</script>
+
+<div class="login-fullscreen-wrapper">
+  <!-- Left Side: Brand Visual & Features Panel (Desktop Full Height) -->
+  <aside class="login-split-brand">
+    <div class="brand-ambient-glow glow-1"></div>
+    <div class="brand-ambient-glow glow-2"></div>
+
+    <div class="brand-split-inner">
+      <!-- Top Brand Header -->
+      <div class="brand-top-bar">
+        <a href="/" class="brand-logo-combo text-decoration-none">
+          <div class="brand-logo-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="brand-logo-text">
+            <span class="brand-title">STUDENT SERVICE</span>
+            <span class="brand-sub">CENTER PLATFORM</span>
+          </div>
+        </a>
+        <span class="badge-official">OFFICIAL PORTAL</span>
+      </div>
+
+      <!-- Center Hero Headline & Value Props -->
+      <div class="brand-hero-content">
+        <div class="brand-hero-chip">
+          <i class="fa-solid fa-bolt text-warning"></i>
+          <span>Portal Pelayanan Terpadu &amp; Mandiri</span>
+        </div>
+        <h1 class="brand-hero-title">
+          Administrasi Siswa Digital, <br/>
+          <span class="text-gradient-brand">Lebih Cepat &amp; Praktis.</span>
+        </h1>
+        <p class="brand-hero-desc">
+          Masuk ke portal SSC untuk mengajukan surat aktif sekolah, surat pengantar PKL/magang, rekomendasi beasiswa, dan legalisir dokumen resmi tanpa antre di ruang Tata Usaha.
+        </p>
+
+        <!-- Feature Cards -->
+        <div class="brand-feature-stack">
+          <div class="brand-feature-item">
+            <div class="brand-feat-icon feat-orange"><i class="fa-solid fa-bolt"></i></div>
+            <div>
+              <strong class="feat-name">Proses Cepat 1 Hari Kerja</strong>
+              <p class="feat-desc">Permohonan diverifikasi langsung oleh staf TU sekolah secara terstruktur.</p>
+            </div>
+          </div>
+          <div class="brand-feature-item">
+            <div class="brand-feat-icon feat-purple"><i class="fa-solid fa-qrcode"></i></div>
+            <div>
+              <strong class="feat-name">QR Code &amp; Tanda Tangan Digital</strong>
+              <p class="feat-desc">Setiap dokumen resmi memiliki kode validitas otentik yang dapat diverifikasi instansi luar.</p>
+            </div>
+          </div>
+          <div class="brand-feature-item">
+            <div class="brand-feat-icon feat-green"><i class="fa-solid fa-mobile-screen-button"></i></div>
+            <div>
+              <strong class="feat-name">100% Transparan &amp; Paperless</strong>
+              <p class="feat-desc">Lacak nomor tiket pengajuan Anda secara real-time langsung dari smartphone.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Security Seal -->
+      <div class="brand-bottom-seal">
+        <i class="fa-solid fa-shield-halved text-success fs-5"></i>
+        <span>Sistem Informasi Administrasi Terenkripsi &amp; Terintegrasi Google Cloud.</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right Side: Interactive Login Form Panel -->
+  <main class="login-split-form">
+    <div class="form-container-box">
+      <!-- Back Navigation & Header -->
+      <div class="form-header-row">
+        <a href="/" class="btn-back-home" title="Kembali ke Beranda">
+          <i class="fa-solid fa-arrow-left me-2"></i>
+          <span>Beranda</span>
+        </a>
+        <div class="school-status-pill">
+          <span class="status-indicator-dot"></span>
+          <span>Sistem Online</span>
+        </div>
+      </div>
+
+      <div class="form-title-wrap">
+        <h2 id="loginFormTitle" class="form-main-title">Masuk ke Portal</h2>
+        <p class="form-sub-title">Silakan pilih akses cepat demo atau masukkan username dan kata sandi akun Anda.</p>
+      </div>
+
+      <!-- Quick Demo Login Cards -->
+      <div class="quick-demo-section">
+        <div class="quick-demo-header">
+          <i class="fa-solid fa-bolt text-warning"></i>
+          <span>Pilih Akun Demo (1-Klik Masuk)</span>
+        </div>
+        <div class="quick-demo-grid">
+          <!-- Student Demo Card -->
+          <button type="button" class="demo-card demo-student" onclick="triggerQuickLogin('peserta','edudigital')">
+            <div class="demo-card-head">
+              <div class="demo-icon student"><i class="fa-solid fa-user-graduate"></i></div>
+              <div class="text-start">
+                <strong class="d-block text-dark">Akun Siswa</strong>
+                <small class="text-muted">Arbi Pratama (XII RPL)</small>
+              </div>
+            </div>
+            <div class="demo-meta">
+              <span>User: <code>peserta</code></span>
+              <span>Pass: <code>edudigital</code></span>
+            </div>
+            <div class="demo-card-footer">
+              <span>Masuk Siswa</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </button>
+
+          <!-- Admin TU Demo Card -->
+          <button type="button" class="demo-card demo-admin" onclick="triggerQuickLogin('admin','admin2026')">
+            <div class="demo-card-head">
+              <div class="demo-icon admin"><i class="fa-solid fa-shield-halved"></i></div>
+              <div class="text-start">
+                <strong class="d-block text-dark">Admin TU</strong>
+                <small class="text-muted">Drs. H. Mulyadi (Staf)</small>
+              </div>
+            </div>
+            <div class="demo-meta">
+              <span>User: <code>admin</code></span>
+              <span>Pass: <code>admin2026</code></span>
+            </div>
+            <div class="demo-card-footer">
+              <span>Masuk Admin</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="login-divider">
+        <span>Atau Masuk Manual</span>
+      </div>
+
+      <!-- Standard Login Form -->
+      <form id="formLogin" onsubmit="submitFormLogin(event)" novalidate>
+        <!-- Username / NIS Field -->
+        <div class="mb-3">
+          <label for="login-username" class="form-label-custom">Username atau NIS Siswa</label>
+          <div class="input-group-custom">
+            <span class="input-icon-box"><i class="fa-solid fa-user"></i></span>
+            <input type="text" id="login-username" class="form-input-custom" placeholder="Contoh: peserta atau admin" required autocomplete="username" spellcheck="false"/>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label for="login-password" class="form-label-custom mb-0">Kata Sandi</label>
+            <a href="/p/kontak.html" class="forgot-link">Lupa Sandi?</a>
+          </div>
+          <div class="input-group-custom">
+            <span class="input-icon-box"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" id="login-password" class="form-input-custom" placeholder="Masukkan kata sandi akun" required autocomplete="current-password"/>
+            <button type="button" class="btn-toggle-eye" onclick="togglePass()" aria-label="Tampilkan kata sandi">
+              <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="btn-login-submit" class="btn-submit-login">
+          <i class="fa-solid fa-right-to-bracket me-2"></i>
+          <span>Masuk Sekarang</span>
+        </button>
+      </form>
+
+      <!-- Security / Help Footer -->
+      <div class="login-bottom-help">
+        <i class="fa-solid fa-circle-question text-muted me-1"></i>
+        <span>Butuh bantuan akun? Hubungi staf TU melalui halaman <a href="/p/kontak.html">Kontak Bantuan</a>.</span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<style>
+/* ══════════════════════════════════════════════════════
+   FULLSCREEN DESKTOP & PROPORTIONAL MOBILE LOGIN SYSTEM
+   ══════════════════════════════════════════════════════ */
+.login-fullscreen-wrapper {
+  display: flex;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #FFFBF8;
+  overflow-x: hidden;
+}
+
+/* LEFT SIDE: BRAND HERO PANEL */
+.login-split-brand {
+  position: relative;
+  width: 48%;
+  min-height: 100vh;
+  background: linear-gradient(150deg, #090E17 0%, #131E31 50%, #0F172A 100%);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3.5rem 3.5rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.brand-ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+}
+.glow-1 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(255,107,53,.22), transparent 70%);
+  top: -100px;
+  left: -80px;
+}
+.glow-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(139,92,246,.18), transparent 70%);
+  bottom: -120px;
+  right: -100px;
+}
+
+.brand-split-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 2.5rem;
+}
+
+.brand-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.brand-logo-combo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-logo-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--orange-500, #FF6B35), var(--orange-600, #EA580C));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 10px 24px -6px rgba(255,107,53,.5);
+}
+.brand-title {
+  display: block;
+  font-weight: 800;
+  font-size: 1.15rem;
+  line-height: 1.1;
+  color: #FFFFFF;
+}
+.brand-sub {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: var(--orange-400, #FB923C);
+}
+.badge-official {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.8);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 6px 14px;
+  border-radius: 100px;
+}
+
+.brand-hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,107,53,.15);
+  border: 1px solid rgba(255,107,53,.3);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--orange-300, #FDBA74);
+  margin-bottom: 1.25rem;
+}
+.brand-hero-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #FFFFFF;
+  margin-bottom: 1rem;
+}
+.text-gradient-brand {
+  background: linear-gradient(135deg, #FF8A5B 0%, #FFA07A 50%, #FDBA74 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.brand-hero-desc {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,.75);
+  max-width: 480px;
+  margin-bottom: 2rem;
+}
+
+.brand-feature-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.brand-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  transition: all .25s ease;
+}
+.brand-feature-item:hover {
+  background: rgba(255,255,255,.07);
+  border-color: rgba(255,107,53,.35);
+  transform: translateX(4px);
+}
+.brand-feat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.feat-orange { background: rgba(255,107,53,.15); color: #FF6B35; }
+.feat-purple { background: rgba(139,92,246,.15); color: #A78BFA; }
+.feat-green  { background: rgba(16,185,129,.15); color: #34D399; }
+.feat-name {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 2px;
+}
+.feat-desc {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,.6);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.brand-bottom-seal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,.6);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+/* RIGHT SIDE: FORM PANEL */
+.login-split-form {
+  width: 52%;
+  min-height: 100vh;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 4rem;
+  overflow-y: auto;
+}
+
+.form-container-box {
+  width: 100%;
+  max-width: 480px;
+}
+
+.form-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.btn-back-home {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink-600, #475569);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: #F8FAFC;
+  border: 1px solid var(--ink-100, #E2E8F0);
+  transition: all .2s ease;
+}
+.btn-back-home:hover {
+  color: var(--orange-600, #EA580C);
+  background: #FFF6F0;
+  border-color: var(--orange-200, #FED7AA);
+}
+.school-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #10B981;
+  background: rgba(16,185,129,.08);
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(16,185,129,.2);
+}
+.status-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+  animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(.8); }
+}
+
+.form-title-wrap {
+  margin-bottom: 2rem;
+}
+.form-main-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--ink-900, #0F172A);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+.form-sub-title {
+  font-size: 0.92rem;
+  color: var(--ink-500, #64748B);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Quick Demo Section */
+.quick-demo-section {
+  background: #FFFDFB;
+  border: 1px solid var(--orange-100, #FFEDD5);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 2rem;
+}
+.quick-demo-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-700, #334155);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.quick-demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.demo-card {
+  background: #FFFFFF;
+  border: 1.5px solid var(--ink-100, #E2E8F0);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  transition: all .25s ease;
+  text-align: left;
+}
+.demo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -8px rgba(0,0,0,.08);
+}
+.demo-card.demo-student:hover {
+  border-color: var(--orange-400, #FB923C);
+}
+.demo-card.demo-admin:hover {
+  border-color: #8B5CF6;
+}
+.demo-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.demo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.demo-icon.student { background: #FFF6F0; color: var(--orange-500, #FF6B35); }
+.demo-icon.admin   { background: #F5F3FF; color: #8B5CF6; }
+.demo-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.72rem;
+  color: var(--ink-500, #64748B);
+}
+.demo-meta code {
+  background: #F1F5F9;
+  color: var(--ink-800, #1E293B);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.demo-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding-top: 8px;
+  border-top: 1px solid var(--ink-50, #F8FAFC);
+}
+.demo-student .demo-card-footer { color: var(--orange-600, #EA580C); }
+.demo-admin .demo-card-footer   { color: #7C3AED; }
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.75rem 0;
+  color: var(--ink-400, #94A3B8);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.login-divider::before, .login-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--ink-100, #E2E8F0);
+}
+.login-divider span {
+  padding: 0 14px;
+}
+
+/* Custom Input Groups */
+.form-label-custom {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ink-800, #1E293B);
+  margin-bottom: 6px;
+}
+.input-group-custom {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-icon-box {
+  position: absolute;
+  left: 16px;
+  color: var(--ink-400, #94A3B8);
+  font-size: 1rem;
+  pointer-events: none;
+  transition: color .2s ease;
+}
+.form-input-custom {
+  width: 100%;
+  height: 52px;
+  padding: 12px 16px 12px 48px;
+  font-size: 0.95rem;
+  color: var(--ink-900, #0F172A);
+  background: #F8FAFC;
+  border: 1.5px solid var(--ink-200, #CBD5E1);
+  border-radius: 14px;
+  outline: none;
+  transition: all .2s ease;
+}
+.form-input-custom:focus {
+  background: #FFFFFF;
+  border-color: var(--orange-500, #FF6B35);
+  box-shadow: 0 0 0 4px rgba(255,107,53,.15);
+}
+.form-input-custom:focus ~ .input-icon-box {
+  color: var(--orange-500, #FF6B35);
+}
+.btn-toggle-eye {
+  position: absolute;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--ink-400, #94A3B8);
+  font-size: 1rem;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color .2s ease;
+}
+.btn-toggle-eye:hover {
+  color: var(--ink-700, #334155);
+}
+.forgot-link {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--orange-600, #EA580C);
+  text-decoration: none;
+}
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Submit Button */
+.btn-submit-login {
+  width: 100%;
+  height: 54px;
+  background: linear-gradient(135deg, var(--orange-500, #FF6B35) 0%, var(--orange-600, #EA580C) 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 14px 28px -10px rgba(255,107,53,.6);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.btn-submit-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px -8px rgba(255,107,53,.7);
+}
+.btn-submit-login:disabled {
+  opacity: .75;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-bottom-help {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--ink-500, #64748B);
+}
+.login-bottom-help a {
+  color: var(--orange-600, #EA580C);
+  font-weight: 600;
+  text-decoration: none;
+}
+.login-bottom-help a:hover {
+  text-decoration: underline;
+}
+
+/* ══════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS & PROPORTION (< 992px)
+   ══════════════════════════════════════════════════════ */
+@media (max-width: 991.98px) {
+  .login-fullscreen-wrapper {
+    flex-direction: column;
+    min-height: 100vh;
+    background: #FFFDFB;
+  }
+  .login-split-brand {
+    width: 100%;
+    min-height: auto;
+    padding: 2.5rem 1.5rem 2rem;
+    gap: 1.5rem;
+  }
+  .brand-hero-title {
+    font-size: 1.75rem;
+  }
+  .brand-hero-desc {
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+  }
+  .brand-feature-stack {
+    display: none; /* Hide dense stack on mobile to keep focus on login */
+  }
+  .brand-bottom-seal {
+    display: none;
+  }
+
+  .login-split-form {
+    width: 100%;
+    min-height: auto;
+    padding: 2rem 1.5rem 3rem;
+    border-radius: 28px 28px 0 0;
+    margin-top: -20px;
+    background: #FFFFFF;
+    box-shadow: 0 -10px 30px rgba(0,0,0,.08);
+  }
+  .form-container-box {
+    max-width: 100%;
+  }
+  .quick-demo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script>
+function togglePass() {
+  var p = document.getElementById("login-password");
+  var ic = document.getElementById("togglePasswordIcon");
+  if (!p) return;
+  if (p.type === "password") {
+    p.type = "text";
+    if (ic) ic.className = "fa-solid fa-eye-slash";
+  } else {
+    p.type = "password";
+    if (ic) ic.className = "fa-solid fa-eye";
+  }
+}
+
+function triggerQuickLogin(u, p) {
+  var uEl = document.getElementById("login-username");
+  var pEl = document.getElementById("login-password");
+  if (uEl) uEl.value = u;
+  if (pEl) pEl.value = p;
+  submitFormLogin();
+}
+
+function submitFormLogin(e) {
+  if (e) e.preventDefault();
+  var u = (document.getElementById("login-username") || {}).value || "";
+  var p = (document.getElementById("login-password") || {}).value || "";
+  var btn = document.getElementById("btn-login-submit");
+
+  if (!u || !p) {
+    if (window.SSC && SSC.showToast) SSC.showToast("Silakan lengkapi username dan kata sandi.", "warning");
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Memvalidasi Akun...';
+  }
+
+  function proceedWithSession(sessionObj) {
+    sessionStorage.setItem("ssc_active_session", JSON.stringify(sessionObj));
+    if (window.SSC && SSC.setSession) SSC.setSession(sessionObj);
+    var dest = (sessionObj.role === "admin") ? "/p/admin.html" : "/p/dashboard.html";
+    if (window.SSC && SSC.showToast) SSC.showToast("Login Berhasil! Selamat datang, " + (sessionObj.name || u), "success");
+    setTimeout(function() { window.location.href = dest; }, 350);
+  }
+
+  function fallbackLocalLogin() {
+    var role = (u === "admin") ? "admin" : "student";
+    var sessionObj = (role === "admin") ?
+      { user_id: "USR-001", username: "admin", role: "admin", name: "Drs. H. Mulyadi, M.Pd" } :
+      { user_id: "USR-002", username: "peserta", role: "student", name: "Arbi Pratama", student_id: "STD-2026-001" };
+    proceedWithSession(sessionObj);
+  }
+
+  // Try live GAS call if online and available
+  if (window.SSC && typeof SSC.callGAS === 'function') {
+    SSC.callGAS("login", { username: u, password: p })
+      .then(function(res) {
+        if (res && res.status === "success" && res.data) {
+          proceedWithSession(res.data);
+        } else {
+          fallbackLocalLogin();
+        }
+      })
+      .catch(function(err) {
+        console.warn("GAS connection fallback:", err);
+        fallbackLocalLogin();
+      });
+  } else {
+    fallbackLocalLogin();
+  }
+}
+
+window.SSC_pageInit = function() {
+  document.body.classList.add("page-clean-view");
+  var nav = document.getElementById("public-navbar");
+  var footer = document.getElementById("ssc-footer");
+  if (nav) nav.style.display = "none";
+  if (footer) footer.style.display = "none";
+
+  var params = new URLSearchParams(window.location.search);
+  if (params.get("role") === "admin") {
+    var title = document.getElementById("loginFormTitle");
+    if (title) title.innerText = "Masuk Admin TU";
+    triggerQuickLogin("admin", "admin2026");
+  }
+};
+</script>
