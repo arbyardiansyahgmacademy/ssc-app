@@ -121,7 +121,85 @@
         </div>
       </div>
     </div>
-  </section>
+</div>
+
+<style>
+.modal-preview-box {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 860px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.45);
+  overflow: hidden;
+  animation: modalFadeIn .2s ease-out;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+.ssc-zoom-bar {
+  background: rgba(15, 23, 42, 0.88) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.ssc-zoom-bar .btn-link {
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity .15s, transform .15s;
+}
+.ssc-zoom-bar .btn-link:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+@media (max-width: 576px) {
+  #previewDocModalBackdrop {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .modal-preview-box {
+    max-height: 94vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    margin-top: auto !important;
+  }
+}
+</style>
+
+<!-- ATTACHMENT PREVIEW MODAL (LIGHTBOX INTERAKTIF JS) -->
+<div id="previewDocModalBackdrop" onclick="if(event.target===this) closeDocModal();" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,0.8);z-index:999999;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);">
+  <div class="modal-preview-box">
+    <div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
+      <div class="d-flex align-items-center gap-2 overflow-hidden">
+        <div class="service-icon-badge svc-orange" style="width:36px;height:36px;font-size:.9rem;flex-shrink:0;">
+          <i class="fa-solid fa-paperclip"></i>
+        </div>
+        <div class="overflow-hidden">
+          <div class="d-flex align-items-center gap-2">
+            <h6 class="fw-bold mb-0 text-truncate" id="previewModalTitle" style="color:var(--ink-900);font-size:.95rem;">Berkas Unggahan</h6>
+            <span id="previewModalBadge" class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1" style="font-size:.7rem;">Lampiran</span>
+          </div>
+          <small class="text-muted" style="font-size:.72rem;"><i class="fa-solid fa-shield-halved text-success me-1"></i>Pratinjau Interaktif (Bebas Unduh Otomatis)</small>
+        </div>
+      </div>
+      <button type="button" class="btn-close shadow-none" onclick="closeDocModal()"></button>
+    </div>
+    <div class="p-3 text-center overflow-auto flex-grow-1" id="previewModalBody" style="background:#f1f5f9;min-height:320px;display:flex;align-items:center;justify-content:center;">
+      <!-- Image or Document preview rendered dynamically by JS -->
+    </div>
+    <div class="p-3 border-top d-flex flex-wrap justify-content-between align-items-center bg-white gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <a href="#" target="_blank" id="previewModalDownloadBtn" class="btn btn-sm btn-outline-secondary" download>
+          <i class="fa-solid fa-download me-1"></i> Unduh Berkas
+        </a>
+        <a href="#" target="_blank" id="previewModalExternalLink" class="btn btn-sm btn-link text-decoration-none text-muted" style="font-size:.8rem;">
+          <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Tab Baru
+        </a>
+      </div>
+      <button type="button" class="btn btn-sm btn-navy px-4" onclick="closeDocModal()">Tutup</button>
+    </div>
+  </div>
 </div>
 
 <!-- Interactive Tracker Engine -->
@@ -143,15 +221,7 @@ function handlePublicTrack() {
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Melacak...';
   }
 
-  setTimeout(function() {
-    var db = (window.SSC && SSC.db) ? SSC.db : (window.DUMMY_DB || { requests: [] });
-    var allReqs = (db.submissions || db.requests || []);
-    var found = allReqs.find(function(r) {
-      var sId = (r.submission_id || "").toUpperCase();
-      var rId = (r.request_id || "").toUpperCase();
-      return sId === code || rId === code || sId.replace("SSC-", "REQ-") === code || rId.replace("REQ-", "SSC-") === code;
-    });
-
+  function renderResult(found) {
     resBox.classList.remove("d-none");
     if (btn) {
       btn.disabled = false;
@@ -176,13 +246,15 @@ function handlePublicTrack() {
     var s2 = (isProgress || isDone) ? "completed" : "pending";
     var s3 = isDone ? "completed" : "pending";
 
-    var attachHtml = found.attachment_url ?
-      '<div class="col-sm-6"><strong class="d-block small text-muted">Berkas Lampiran:</strong><a href="' + found.attachment_url + '" target="_blank" class="btn btn-sm btn-outline-primary py-0 px-2 mt-1" style="font-size:.78rem;"><i class="fa-solid fa-paperclip me-1"></i> Lihat Berkas Pengajuan</a></div>' :
-      '<div class="col-sm-6"><strong class="d-block small text-muted">Berkas Lampiran:</strong><span class="text-muted small">Tidak ada berkas tambahan</span></div>';
+    var attachBtn = renderAttachmentButton(found.attachment_url, found.attachment_name, ticketDisplay, found.student_name);
+    var attachHtml = '<div class="col-sm-6"><strong class="d-block small text-muted mb-1">Berkas Lampiran:</strong>' + attachBtn + '</div>';
 
     var downloadAction = isDone ?
       '<a href="' + (found.document_url || found.drive_url || '#') + '" target="_blank" class="btn btn-navy px-4 py-2"><i class="fa-solid fa-download me-2"></i> Unduh Surat PDF Resmi</a>' :
       (stUpper === "DITOLAK" ? '<span class="text-danger small fw-semibold"><i class="fa-solid fa-circle-xmark me-1"></i> Permohonan ditolak oleh Tata Usaha. Silakan hubungi staf sekolah.</span>' : '<span class="text-muted small"><i class="fa-solid fa-clock me-1"></i> Dokumen sedang dalam alur verifikasi resmi Tata Usaha.</span>');
+
+    var rawSubDate = String(found.submission_date || found.submit_date || '-').trim();
+    var displaySubDate = rawSubDate === '-' ? '-' : (rawSubDate.indexOf('WIB') !== -1 ? rawSubDate : (rawSubDate + ' WIB'));
 
     resBox.innerHTML = '<div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-4 pb-3 border-bottom">' +
       '<div>' +
@@ -194,7 +266,7 @@ function handlePublicTrack() {
     '<div class="row g-3 mb-4 text-start">' +
       '<div class="col-sm-6"><strong class="d-block small text-muted">Jenis Dokumen:</strong><span class="fw-semibold">' + found.service_name + '</span></div>' +
       '<div class="col-sm-6"><strong class="d-block small text-muted">Pemohon:</strong><span class="fw-semibold">' + found.student_name + ' (' + (found.student_class || found.class || 'XII') + ')</span></div>' +
-      '<div class="col-sm-6"><strong class="d-block small text-muted">Waktu Diajukan:</strong><span>' + (found.submission_date || found.submit_date || '-') + ' WIB</span></div>' +
+      '<div class="col-sm-6"><strong class="d-block small text-muted">Waktu Diajukan:</strong><span>' + displaySubDate + '</span></div>' +
       '<div class="col-sm-6"><strong class="d-block small text-muted">Catatan Petugas TU:</strong><span>' + (found.admin_note || "Sedang ditelaah oleh tim verifikator.") + '</span></div>' +
       attachHtml +
     '</div>' +
@@ -206,8 +278,225 @@ function handlePublicTrack() {
       '</div>' +
     '</div>' +
     '<div class="text-center">' + downloadAction + '</div>';
-  }, 350);
+  }
+
+  function searchLocal() {
+    var db = (window.SSC && SSC.db) ? SSC.db : (window.DUMMY_DB || { requests: [] });
+    var allReqs = (db.submissions || db.requests || []);
+    return allReqs.find(function(r) {
+      var sId = (r.submission_id || "").toUpperCase();
+      var rId = (r.request_id || "").toUpperCase();
+      return sId === code || rId === code || sId.replace("SSC-", "REQ-") === code || rId.replace("REQ-", "SSC-") === code;
+    });
+  }
+
+  if (window.SSC && typeof SSC.callGAS === 'function') {
+    SSC.callGAS("trackSubmission", { ticket: code }).then(function(res) {
+      if (res && res.status === "success" && res.data) {
+        renderResult(res.data);
+      } else {
+        renderResult(searchLocal());
+      }
+    }).catch(function() {
+      renderResult(searchLocal());
+    });
+  } else {
+    setTimeout(function() {
+      renderResult(searchLocal());
+    }, 250);
+  }
 }
+
+var _photoZoom = 1;
+var _photoRotation = 0;
+
+function getAttachmentMeta(url, name, fallbackType) {
+  var rawUrl = String(url || '').trim();
+  var rawName = String(name || '').trim();
+
+  if (rawUrl.indexOf('#') !== -1) {
+    var matchName = rawUrl.match(/[#&]filename=([^&]+)/);
+    if (matchName && !rawName) {
+      try { rawName = decodeURIComponent(matchName[1]); } catch(e) { rawName = matchName[1]; }
+    }
+  }
+
+  var hashType = '';
+  if (rawUrl.indexOf('#') !== -1) {
+    var matchType = rawUrl.match(/[#&]type=([^&]+)/);
+    if (matchType) hashType = matchType[1].toLowerCase();
+  }
+
+  var driveId = '';
+  var driveMatch = rawUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+                   rawUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (driveMatch) driveId = driveMatch[1];
+
+  var isDataImg = rawUrl.indexOf('data:image/') === 0;
+  var isDataPdf = rawUrl.indexOf('data:application/pdf') === 0;
+
+  var checkStr = (rawName || rawUrl).split('?')[0].split('#')[0].toLowerCase();
+  var isImgExt = checkStr.match(/\.(jpe?g|png|webp|gif|bmp|svg)$/i);
+  var isPdfExt = checkStr.match(/\.pdf$/i);
+
+  var isImage = (hashType === 'image') || isDataImg || !!isImgExt;
+  var isPdf = (hashType === 'pdf') || isDataPdf || !!isPdfExt;
+
+  if (!isImage && !isPdf) {
+    if (checkStr.indexOf('foto') !== -1 || checkStr.indexOf('gambar') !== -1 || checkStr.indexOf('img') !== -1 || checkStr.indexOf('ktp') !== -1) {
+      isImage = true;
+    } else if (fallbackType === 'image') {
+      isImage = true;
+    } else {
+      isPdf = true;
+    }
+  }
+
+  var previewUrl = driveId ? ('https://drive.google.com/file/d/' + driveId + '/preview') : rawUrl;
+  var directImgUrl = isDataImg ? rawUrl : (driveId ? ('https://lh3.googleusercontent.com/d/' + driveId) : rawUrl);
+  var downloadUrl = driveId ? ('https://drive.google.com/uc?export=download&id=' + driveId) : rawUrl;
+
+  return {
+    rawUrl: rawUrl,
+    name: rawName || (isImage ? 'Foto Lampiran' : 'Dokumen PDF'),
+    driveId: driveId,
+    isImage: isImage,
+    isPdf: isPdf,
+    previewUrl: previewUrl,
+    directImgUrl: directImgUrl,
+    downloadUrl: downloadUrl,
+    typeLabel: isImage ? 'Foto / Gambar' : 'Dokumen PDF'
+  };
+}
+
+function renderAttachmentButton(url, name, ticket, student) {
+  if (!url || url === '-' || url === 'null' || url.length < 5) {
+    return '<span class="text-muted small" style="font-size:.75rem;">Tanpa Berkas</span>';
+  }
+  var meta = getAttachmentMeta(url, name);
+  var labelTitle = (student ? (student + ' - ') : '') + meta.name + ' (' + ticket + ')';
+  var safeTitle = encodeURIComponent(labelTitle);
+  var safeUrl = encodeURIComponent(meta.rawUrl);
+  var safeName = encodeURIComponent(meta.name);
+
+  if (meta.isImage) {
+    return '<button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 text-nowrap d-inline-flex align-items-center gap-1" style="font-size:.78rem;font-weight:600;border-radius:6px;" onclick="previewDocModal(\''+safeUrl+'\', \''+safeTitle+'\', \''+safeName+'\')" title="Klik untuk melihat foto">'+
+      '<i class="fa-solid fa-image text-primary"></i> <span>Foto Lampiran</span>'+
+      '</button>';
+  } else {
+    return '<button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 text-nowrap d-inline-flex align-items-center gap-1" style="font-size:.78rem;font-weight:600;border-radius:6px;" onclick="previewDocModal(\''+safeUrl+'\', \''+safeTitle+'\', \''+safeName+'\')" title="Klik untuk membuka dokumen PDF">'+
+      '<i class="fa-solid fa-file-pdf text-danger"></i> <span>Dokumen PDF</span>'+
+      '</button>';
+  }
+}
+
+window.previewDocModal = function(url, title, filename) {
+  var rawUrl = decodeURIComponent(url || '');
+  var rawTitle = decodeURIComponent(title || 'Berkas Lampiran');
+  var rawName = decodeURIComponent(filename || '');
+  if (!rawUrl) {
+    if (window.SSC && SSC.showToast) SSC.showToast('Berkas lampiran tidak ditemukan.', 'warning');
+    return;
+  }
+
+  var meta = getAttachmentMeta(rawUrl, rawName);
+  var modal = document.getElementById('previewDocModalBackdrop');
+  var titleEl = document.getElementById('previewModalTitle');
+  var badgeEl = document.getElementById('previewModalBadge');
+  var bodyEl = document.getElementById('previewModalBody');
+  var downloadBtn = document.getElementById('previewModalDownloadBtn');
+  var extLink = document.getElementById('previewModalExternalLink');
+  if (!modal || !bodyEl) return;
+
+  if (titleEl) titleEl.textContent = rawTitle;
+  if (badgeEl) {
+    if (meta.isImage) {
+      badgeEl.className = 'badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1';
+      badgeEl.innerHTML = '<i class="fa-solid fa-camera me-1"></i> Foto / Gambar';
+    } else {
+      badgeEl.className = 'badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1';
+      badgeEl.innerHTML = '<i class="fa-solid fa-file-lines me-1"></i> Dokumen PDF';
+    }
+  }
+
+  if (downloadBtn) {
+    downloadBtn.href = meta.downloadUrl;
+    downloadBtn.setAttribute('download', meta.name || 'berkas');
+  }
+  if (extLink) {
+    extLink.href = meta.previewUrl || meta.rawUrl;
+  }
+
+  _photoZoom = 1;
+  _photoRotation = 0;
+
+  if (meta.isImage) {
+    var imgSrc = meta.directImgUrl || meta.rawUrl;
+    bodyEl.innerHTML = 
+      '<div class="ssc-image-viewer" style="position:relative;width:100%;min-height:360px;max-height:70vh;background:#0f172a;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:10px;">' +
+        '<div id="imageDragWrapper" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:auto;">' +
+          '<img id="previewDocImage" src="' + imgSrc + '" alt="' + (meta.name || 'Foto Lampiran') + '" ' +
+            'style="max-width:100%;max-height:65vh;object-fit:contain;transition:transform 0.15s ease-out;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.4);" ' +
+            'onerror="handleImageFallback(this, \'' + encodeURIComponent(meta.previewUrl) + '\')">' +
+        '</div>' +
+        '<div class="ssc-zoom-bar d-flex align-items-center gap-1 p-1 px-2 rounded-pill position-absolute bottom-0 mb-3 text-white shadow-lg" style="z-index:10;">' +
+          '<button type="button" class="btn btn-sm btn-link text-white p-1 px-2" onclick="sscZoomPhoto(-0.25)" title="Perkecil (-)"><i class="fa-solid fa-magnifying-glass-minus"></i></button>' +
+          '<span id="zoomPercentLabel" class="small px-1 fw-bold user-select-none" style="min-width:44px;text-align:center;font-size:.78rem;">100%</span>' +
+          '<button type="button" class="btn btn-sm btn-link text-white p-1 px-2" onclick="sscZoomPhoto(0.25)" title="Perbesar (+)"><i class="fa-solid fa-magnifying-glass-plus"></i></button>' +
+          '<span class="text-white-50">|</span>' +
+          '<button type="button" class="btn btn-sm btn-link text-white p-1 px-2" onclick="sscRotatePhoto()" title="Putar 90°"><i class="fa-solid fa-rotate-right"></i></button>' +
+          '<button type="button" class="btn btn-sm btn-link text-white p-1 px-2" onclick="sscResetPhoto()" title="Reset Tampilan"><i class="fa-solid fa-arrows-rotate"></i></button>' +
+        '</div>' +
+      '</div>';
+  } else {
+    bodyEl.innerHTML = 
+      '<div style="width:100%;height:68vh;min-height:420px;background:#f8fafc;border-radius:10px;overflow:hidden;position:relative;border:1px solid #e2e8f0;">' +
+        '<iframe id="previewDocIframe" src="' + meta.previewUrl + '" style="width:100%;height:100%;border:none;" allow="autoplay" loading="lazy"></iframe>' +
+      '</div>';
+  }
+
+  modal.style.display = 'flex';
+};
+
+window.sscZoomPhoto = function(delta) {
+  var img = document.getElementById('previewDocImage');
+  var label = document.getElementById('zoomPercentLabel');
+  if (!img) return;
+  _photoZoom = Math.min(Math.max(0.5, _photoZoom + delta), 3.5);
+  img.style.transform = 'scale(' + _photoZoom + ') rotate(' + _photoRotation + 'deg)';
+  if (label) label.textContent = Math.round(_photoZoom * 100) + '%';
+};
+
+window.sscRotatePhoto = function() {
+  var img = document.getElementById('previewDocImage');
+  if (!img) return;
+  _photoRotation = (_photoRotation + 90) % 360;
+  img.style.transform = 'scale(' + _photoZoom + ') rotate(' + _photoRotation + 'deg)';
+};
+
+window.sscResetPhoto = function() {
+  var img = document.getElementById('previewDocImage');
+  var label = document.getElementById('zoomPercentLabel');
+  if (!img) return;
+  _photoZoom = 1;
+  _photoRotation = 0;
+  img.style.transform = 'scale(1) rotate(0deg)';
+  if (label) label.textContent = '100%';
+};
+
+window.handleImageFallback = function(imgEl, previewUrl) {
+  var container = imgEl.closest('.ssc-image-viewer') || imgEl.parentElement;
+  if (container) {
+    container.innerHTML = '<iframe src="' + decodeURIComponent(previewUrl) + '" style="width:100%;height:65vh;border:none;border-radius:8px;"></iframe>';
+  }
+};
+
+window.closeDocModal = function() {
+  var modal = document.getElementById('previewDocModalBackdrop');
+  if (modal) modal.style.display = 'none';
+  var bodyEl = document.getElementById('previewModalBody');
+  if (bodyEl) bodyEl.innerHTML = '';
+};
 
 window.handlePublicTrack = handlePublicTrack;
 if (window.SSC) { window.SSC.handlePublicTrack = handlePublicTrack; }

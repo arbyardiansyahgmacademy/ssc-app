@@ -1,12 +1,3 @@
-# KODE.GS — BACKEND GOOGLE APPS SCRIPT (SSC v2.2)
-
-File ini adalah dokumentasi backend Google Apps Script untuk sistem **Student Service Center (SSC)**.
-> **PENTING UNTUK COPY-PASTE:**
-> Gunakan langsung file: **SSC-BLOGGER-FILES/Kode.gs** (Bisa langsung dibuka, Ctrl+A, lalu Ctrl+C tanpa takut tanda markdown terbawa).
-
----
-
-`javascript
 /**
  * ==========================================================================
  * STUDENT SERVICE CENTER (SSC) — GOOGLE APPS SCRIPT BACKEND
@@ -823,4 +814,3 @@ function uploadAttachmentToDrive(filename, mimeType, base64Data, submissionId) {
 function TEST_setup() { Logger.log(setupDatabase()); }
 function TEST_sync() { Logger.log(JSON.stringify(syncAllData()).substring(0, 500)); }
 function TEST_login() { Logger.log(handleUserLogin("admin", "admin2026")); }
-`

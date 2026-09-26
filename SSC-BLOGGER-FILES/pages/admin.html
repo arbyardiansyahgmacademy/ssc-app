@@ -20,17 +20,31 @@
   background: #fff;
   border-radius: 16px;
   width: 100%;
-  max-width: 650px;
-  max-height: 90vh;
+  max-width: 860px;
+  max-height: 92vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.45);
   overflow: hidden;
   animation: modalFadeIn .2s ease-out;
 }
 @keyframes modalFadeIn {
-  from { opacity: 0; transform: scale(.96); }
+  from { opacity: 0; transform: scale(.97); }
   to { opacity: 1; transform: scale(1); }
+}
+.ssc-zoom-bar {
+  background: rgba(15, 23, 42, 0.88) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.ssc-zoom-bar .btn-link {
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity .15s, transform .15s;
+}
+.ssc-zoom-bar .btn-link:hover {
+  opacity: 1;
+  transform: scale(1.15);
 }
 @media (max-width: 576px) {
   #previewDocModalBackdrop {
@@ -38,7 +52,7 @@
     align-items: flex-end !important;
   }
   .modal-preview-box {
-    max-height: 92vh !important;
+    max-height: 94vh !important;
     border-radius: 20px 20px 0 0 !important;
     margin-top: auto !important;
   }
@@ -128,29 +142,37 @@
   </nav>
 </div>
 
-<!-- ATTACHMENT PREVIEW MODAL -->
-<div id="previewDocModalBackdrop" onclick="if(event.target===this) closeDocModal();" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,0.75);z-index:999999;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+<!-- ATTACHMENT PREVIEW MODAL (LIGHTBOX INTERAKTIF JS) -->
+<div id="previewDocModalBackdrop" onclick="if(event.target===this) closeDocModal();" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,0.8);z-index:999999;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);">
   <div class="modal-preview-box">
     <div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
       <div class="d-flex align-items-center gap-2 overflow-hidden">
-        <div class="service-icon-badge svc-purple" style="width:34px;height:34px;font-size:.85rem;flex-shrink:0;">
+        <div class="service-icon-badge svc-purple" style="width:36px;height:36px;font-size:.9rem;flex-shrink:0;">
           <i class="fa-solid fa-paperclip"></i>
         </div>
         <div class="overflow-hidden">
-          <h6 class="fw-bold mb-0 text-truncate" id="previewModalTitle" style="color:var(--ink-900);">Berkas Unggahan Siswa</h6>
-          <small class="text-muted" style="font-size:.72rem;">Verifikasi Berkas Pendukung Siswa</small>
+          <div class="d-flex align-items-center gap-2">
+            <h6 class="fw-bold mb-0 text-truncate" id="previewModalTitle" style="color:var(--ink-900);font-size:.95rem;">Berkas Unggahan Siswa</h6>
+            <span id="previewModalBadge" class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1" style="font-size:.7rem;">Lampiran</span>
+          </div>
+          <small class="text-muted" style="font-size:.72rem;"><i class="fa-solid fa-shield-halved text-success me-1"></i>Pratinjau Interaktif (Bebas Unduh Otomatis)</small>
         </div>
       </div>
       <button type="button" class="btn-close shadow-none" onclick="closeDocModal()"></button>
     </div>
-    <div class="p-3 text-center overflow-auto flex-grow-1" id="previewModalBody" style="background:#f8fafc;min-height:280px;display:flex;align-items:center;justify-content:center;">
-      <!-- Image or Document preview rendered here -->
+    <div class="p-3 text-center overflow-auto flex-grow-1" id="previewModalBody" style="background:#f1f5f9;min-height:320px;display:flex;align-items:center;justify-content:center;">
+      <!-- Image or Document preview rendered dynamically by JS -->
     </div>
-    <div class="p-3 border-top d-flex justify-content-between align-items-center bg-white gap-2">
-      <a href="#" target="_blank" id="previewModalExternalLink" class="btn btn-sm btn-outline-primary">
-        <i class="fa-solid fa-up-right-from-square me-1"></i> Buka Ukuran Penuh
-      </a>
-      <button type="button" class="btn btn-sm btn-secondary px-3" onclick="closeDocModal()">Tutup</button>
+    <div class="p-3 border-top d-flex flex-wrap justify-content-between align-items-center bg-white gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <a href="#" target="_blank" id="previewModalDownloadBtn" class="btn btn-sm btn-outline-secondary" download>
+          <i class="fa-solid fa-download me-1"></i> Unduh Berkas
+        </a>
+        <a href="#" target="_blank" id="previewModalExternalLink" class="btn btn-sm btn-link text-decoration-none text-muted" style="font-size:.8rem;">
+          <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Tab Baru
+        </a>
+      </div>
+      <button type="button" class="btn btn-sm btn-navy px-4" onclick="closeDocModal()">Tutup</button>
     </div>
   </div>
 </div>
@@ -218,60 +240,306 @@
   }
 
   function persistDatabase() {
-    if (window.SSC && typeof SSC.saveDatabase === 'function') {
-      SSC.saveDatabase();
-    } else {
-      try {
+    try {
+      if (window.SSC && typeof SSC.saveDatabase === 'function') {
+        SSC.saveDatabase();
+      } else {
         localStorage.setItem("ssc_dummy_database", JSON.stringify(db));
-      } catch(e) {}
+      }
+    } catch(e) {
+      console.warn("Storage quota exceeded in admin:", e);
+      try {
+        if (Array.isArray(db.submissions)) {
+          db.submissions.forEach(function(s) {
+            if (s.attachment_url && s.attachment_url.length > 500 && s.attachment_url.indexOf('http') !== 0) {
+              s.attachment_url = '';
+            }
+          });
+        }
+        localStorage.setItem("ssc_dummy_database", JSON.stringify(db));
+      } catch(err2) {}
     }
     try {
       window.dispatchEvent(new CustomEvent('ssc_db_updated', { detail: db }));
     } catch(e) {}
   }
 
-  window.previewDocModal = function(url, title) {
+  var _photoZoom = 1;
+  var _photoRotation = 0;
+
+  function getAttachmentMeta(url, name, fallbackType) {
+    var rawUrl = String(url || '').trim();
+    var rawName = String(name || '').trim();
+
+    if (rawUrl.indexOf('#') !== -1) {
+      var matchName = rawUrl.match(/[#&]filename=([^&]+)/);
+      if (matchName && !rawName) {
+        try { rawName = decodeURIComponent(matchName[1]); } catch(e) { rawName = matchName[1]; }
+      }
+    }
+
+    var hashType = '';
+    if (rawUrl.indexOf('#') !== -1) {
+      var matchType = rawUrl.match(/[#&]type=([^&]+)/);
+      if (matchType) hashType = matchType[1].toLowerCase();
+    }
+
+    var driveId = '';
+    var driveMatch = rawUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+                     rawUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (driveMatch) driveId = driveMatch[1];
+
+    var isDataImg = rawUrl.indexOf('data:image/') === 0;
+    var isDataPdf = rawUrl.indexOf('data:application/pdf') === 0;
+
+    var checkStr = (rawName || rawUrl).split('?')[0].split('#')[0].toLowerCase();
+    var isImgExt = checkStr.match(/\.(jpe?g|png|webp|gif|bmp|svg)$/i);
+    var isPdfExt = checkStr.match(/\.pdf$/i);
+
+    var isImage = (hashType === 'image') || isDataImg || !!isImgExt;
+    var isPdf = (hashType === 'pdf') || isDataPdf || !!isPdfExt;
+
+    if (!isImage && !isPdf) {
+      if (checkStr.indexOf('foto') !== -1 || checkStr.indexOf('gambar') !== -1 || checkStr.indexOf('img') !== -1 || checkStr.indexOf('ktp') !== -1) {
+        isImage = true;
+      } else if (fallbackType === 'image') {
+        isImage = true;
+      } else {
+        isPdf = true;
+      }
+    }
+
+    var previewUrl = driveId ? ('https://drive.google.com/file/d/' + driveId + '/preview') : rawUrl;
+    var directImgUrl = isDataImg ? rawUrl : (driveId ? ('https://lh3.googleusercontent.com/d/' + driveId) : rawUrl);
+    var downloadUrl = driveId ? ('https://drive.google.com/uc?export=download&id=' + driveId) : rawUrl;
+
+    return {
+      rawUrl: rawUrl,
+      name: rawName || (isImage ? 'Foto Lampiran' : 'Dokumen PDF'),
+      driveId: driveId,
+      isImage: isImage,
+      isPdf: isPdf,
+      previewUrl: previewUrl,
+      directImgUrl: directImgUrl,
+      downloadUrl: downloadUrl,
+      typeLabel: isImage ? 'Foto / Gambar' : 'Dokumen PDF'
+    };
+  }
+
+  function formatTanggalTable(dateStr) {
+    if (!dateStr || dateStr === '-' || dateStr === 'null') return '<span class="text-muted small">-</span>';
+    var s = String(dateStr).trim();
+    var datePart = s.split(' ')[0] || s.split('T')[0];
+    var timePart = '';
+    if (s.indexOf(' ') !== -1) {
+      timePart = s.substring(s.indexOf(' ') + 1).trim();
+    } else if (s.indexOf('T') !== -1) {
+      var afterT = s.split('T')[1];
+      timePart = afterT.substring(0, 5);
+    }
+    if (timePart) {
+      timePart = timePart.replace(':00.000Z', '').replace('Z', '').replace('+07:00', '').trim();
+      timePart = timePart.replace(/WIB/gi, '').trim();
+      if (timePart.length > 5) timePart = timePart.substring(0, 5);
+      if (timePart) {
+        return '<div class="d-flex flex-column">' +
+          '<span class="fw-semibold text-dark" style="font-size:.82rem;">' + datePart + '</span>' +
+          '<span class="text-muted" style="font-size:.73rem;"><i class="fa-regular fa-clock me-1 text-primary"></i>' + timePart + ' WIB</span>' +
+        '</div>';
+      }
+    }
+    return '<span class="fw-semibold text-dark" style="font-size:.82rem;">' + datePart + '</span>';
+  }
+
+  function getRealtimeWIBString() {
+    var now = new Date();
+    try {
+      var formatter = new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+      var parts = formatter.formatToParts(now);
+      var m = {};
+      parts.forEach(function(p) { m[p.type] = p.value; });
+      return m.year + '-' + m.month + '-' + m.day + ' ' + m.hour + ':' + m.minute + ' WIB';
+    } catch(e) {
+      var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      var wib = new Date(utc + (7 * 3600000));
+      var y = wib.getFullYear();
+      var mo = String(wib.getMonth() + 1).padStart(2, '0');
+      var d = String(wib.getDate()).padStart(2, '0');
+      var h = String(wib.getHours()).padStart(2, '0');
+      var min = String(wib.getMinutes()).padStart(2, '0');
+      return y + '-' + mo + '-' + d + ' ' + h + ':' + min + ' WIB';
+    }
+  }
+
+  function renderAttachmentButton(url, name, ticket, student) {
+    if (!url || url === '-' || url === 'null' || url.length < 5) {
+      return '<span class="text-muted small" style="font-size:.75rem;">Tanpa Berkas</span>';
+    }
+    var meta = getAttachmentMeta(url, name);
+    var labelTitle = (student ? (student + ' - ') : '') + meta.name + ' (' + ticket + ')';
+    var safeTitle = encodeURIComponent(labelTitle);
+    var safeUrl = encodeURIComponent(meta.rawUrl);
+    var safeName = encodeURIComponent(meta.name);
+
+    if (meta.isImage) {
+      return '<button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 text-nowrap d-inline-flex align-items-center gap-1" style="font-size:.78rem;font-weight:600;border-radius:6px;" onclick="previewDocModal(\''+safeUrl+'\', \''+safeTitle+'\', \''+safeName+'\')" title="Klik untuk melihat foto">'+
+        '<i class="fa-solid fa-image text-primary"></i> <span>Foto Lampiran</span>'+
+        '</button>';
+    } else {
+      return '<button type="button" class="btn btn-sm btn-outline-danger py-1 px-2 text-nowrap d-inline-flex align-items-center gap-1" style="font-size:.78rem;font-weight:600;border-radius:6px;" onclick="previewDocModal(\''+safeUrl+'\', \''+safeTitle+'\', \''+safeName+'\')" title="Klik untuk membuka dokumen PDF">'+
+        '<i class="fa-solid fa-file-pdf text-danger"></i> <span>Dokumen PDF</span>'+
+        '</button>';
+    }
+  }
+
+  window.previewDocModal = function(url, title, filename) {
     var rawUrl = decodeURIComponent(url || '');
-    var rawTitle = decodeURIComponent(title || 'Berkas Siswa');
+    var rawTitle = decodeURIComponent(title || 'Berkas Lampiran');
+    var rawName = decodeURIComponent(filename || '');
     if (!rawUrl) {
-      if (window.SSC && SSC.showToast) SSC.showToast('Berkas pendukung tidak ditemukan.', 'warning');
+      if (window.SSC && SSC.showToast) SSC.showToast('Berkas lampiran tidak ditemukan.', 'warning');
       return;
     }
+
+    var meta = getAttachmentMeta(rawUrl, rawName);
     var modal = document.getElementById('previewDocModalBackdrop');
     var titleEl = document.getElementById('previewModalTitle');
+    var badgeEl = document.getElementById('previewModalBadge');
     var bodyEl = document.getElementById('previewModalBody');
-    var linkEl = document.getElementById('previewModalExternalLink');
+    var downloadBtn = document.getElementById('previewModalDownloadBtn');
+    var extLink = document.getElementById('previewModalExternalLink');
     if (!modal || !bodyEl) return;
 
     if (titleEl) titleEl.textContent = rawTitle;
-    if (linkEl) linkEl.href = rawUrl;
+    if (badgeEl) {
+      if (meta.isImage) {
+        badgeEl.className = 'badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1';
+        badgeEl.innerHTML = '<i class="fa-solid fa-camera me-1"></i> Foto / Gambar';
+      } else {
+        badgeEl.className = 'badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1';
+        badgeEl.innerHTML = '<i class="fa-solid fa-file-lines me-1"></i> Dokumen PDF';
+      }
+    }
 
-    var isImg = rawUrl.indexOf('data:image/') === 0 || rawUrl.match(/\.(jpeg|jpg|png|gif|webp)(\?.*)?$/i);
-    if (isImg) {
-      bodyEl.innerHTML = '<div class="text-center p-2"><img src="' + rawUrl + '" alt="' + rawTitle + '" style="max-width:100%;max-height:65vh;object-fit:contain;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);"></div>';
+    if (downloadBtn) {
+      downloadBtn.href = meta.downloadUrl;
+      downloadBtn.setAttribute('download', meta.name || 'berkas');
+    }
+    if (extLink) {
+      extLink.href = meta.previewUrl || meta.rawUrl;
+    }
+
+    _photoZoom = 1;
+    _photoRotation = 0;
+
+    if (meta.isImage) {
+      var imgSrc = meta.directImgUrl || meta.rawUrl;
+      bodyEl.innerHTML = 
+        '<div class="ssc-image-viewer" style="position:relative;width:100%;min-height:360px;max-height:70vh;background:#0f172a;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:10px;">' +
+          '<div id="imageDragWrapper" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:auto;">' +
+            '<img id="previewDocImage" src="' + imgSrc + '" alt="' + (meta.name || 'Foto Lampiran') + '" ' +
+              'style="max-width:100%;max-height:65vh;object-fit:contain;transition:transform 0.15s ease-out;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.4);" ' +
+              'onerror="handleImageFallback(this, \'' + encodeURIComponent(meta.previewUrl) + '\')">' +
+          '</div>' +
+          '<div class="ssc-zoom-bar d-flex align-items-center gap-1 p-1 px-2 rounded-pill position-absolute bottom-0 mb-3 text-white shadow-lg" style="z-index:10;">' +
+            '<button type="button" class="btn btn-sm btn-link text-white p-1 px-2" onclick="sscZoomPhoto(-0.25)" title="Perkecil (-)"><i class="fa-solid fa-magnifying-glass-minus"></i></button>' +
+            '<span id="zoomPercentLabel" class="small px-1 fw-bold user-select-none" style="min-width:44px;text-align:center;font-size:.78rem;">100%</span>' +
+            '<button type="button" class="btn btn-sm btn-link text-white p-1 px-2" onclick="sscZoomPhoto(0.25)" title="Perbesar (+)"><i class="fa-solid fa-magnifying-glass-plus"></i></button>' +
+            '<span class="text-white-50">|</span>' +
+            '<button type="button" class="btn btn-sm btn-link text-white p-1 px-2" onclick="sscRotatePhoto()" title="Putar 90°"><i class="fa-solid fa-rotate-right"></i></button>' +
+            '<button type="button" class="btn btn-sm btn-link text-white p-1 px-2" onclick="sscResetPhoto()" title="Reset Tampilan"><i class="fa-solid fa-arrows-rotate"></i></button>' +
+          '</div>' +
+        '</div>';
     } else {
-      bodyEl.innerHTML = '<div class="w-100 text-center py-4">'+
-        '<i class="fa-solid fa-file-pdf fa-4x text-danger mb-3"></i>'+
-        '<h6 class="fw-bold mb-2">Dokumen Berkas Siswa</h6>'+
-        '<p class="small text-muted mb-4">Berkas PDF pendukung yang diunggah siswa.</p>'+
-        '<a href="' + rawUrl + '" target="_blank" class="btn btn-navy"><i class="fa-solid fa-arrow-up-right-from-square me-2"></i> Buka Dokumen di Tab Baru</a>'+
+      bodyEl.innerHTML = 
+        '<div style="width:100%;height:68vh;min-height:420px;background:#f8fafc;border-radius:10px;overflow:hidden;position:relative;border:1px solid #e2e8f0;">' +
+          '<iframe id="previewDocIframe" src="' + meta.previewUrl + '" style="width:100%;height:100%;border:none;" allow="autoplay" loading="lazy"></iframe>' +
         '</div>';
     }
+
     modal.style.display = 'flex';
+  };
+
+  window.sscZoomPhoto = function(delta) {
+    var img = document.getElementById('previewDocImage');
+    var label = document.getElementById('zoomPercentLabel');
+    if (!img) return;
+    _photoZoom = Math.min(Math.max(0.5, _photoZoom + delta), 3.5);
+    img.style.transform = 'scale(' + _photoZoom + ') rotate(' + _photoRotation + 'deg)';
+    if (label) label.textContent = Math.round(_photoZoom * 100) + '%';
+  };
+
+  window.sscRotatePhoto = function() {
+    var img = document.getElementById('previewDocImage');
+    if (!img) return;
+    _photoRotation = (_photoRotation + 90) % 360;
+    img.style.transform = 'scale(' + _photoZoom + ') rotate(' + _photoRotation + 'deg)';
+  };
+
+  window.sscResetPhoto = function() {
+    var img = document.getElementById('previewDocImage');
+    var label = document.getElementById('zoomPercentLabel');
+    if (!img) return;
+    _photoZoom = 1;
+    _photoRotation = 0;
+    img.style.transform = 'scale(1) rotate(0deg)';
+    if (label) label.textContent = '100%';
+  };
+
+  window.handleImageFallback = function(imgEl, previewUrl) {
+    var container = imgEl.closest('.ssc-image-viewer') || imgEl.parentElement;
+    if (container) {
+      container.innerHTML = '<iframe src="' + decodeURIComponent(previewUrl) + '" style="width:100%;height:65vh;border:none;border-radius:8px;"></iframe>';
+    }
   };
 
   window.closeDocModal = function() {
     var modal = document.getElementById('previewDocModalBackdrop');
     if (modal) modal.style.display = 'none';
+    var bodyEl = document.getElementById('previewModalBody');
+    if (bodyEl) bodyEl.innerHTML = '';
   };
+
+  function tryFallbackGetAllSubmissions(icon) {
+    if (window.SSC && typeof SSC.callGAS === 'function') {
+      SSC.callGAS("getAllSubmissions").then(function(subRes) {
+        if (icon) icon.classList.remove('fa-spin');
+        if (subRes && subRes.status === "success" && Array.isArray(subRes.data)) {
+          db.submissions = subRes.data;
+          persistDatabase();
+          SSC_loadAdminPage(getCurrentActiveAdminPage());
+          if (window.SSC && SSC.showToast) SSC.showToast('Data pengajuan berhasil disinkronkan!', 'success');
+        } else {
+          ensureDatabase();
+          SSC_loadAdminPage(getCurrentActiveAdminPage());
+        }
+      }).catch(function() {
+        if (icon) icon.classList.remove('fa-spin');
+        ensureDatabase();
+        SSC_loadAdminPage(getCurrentActiveAdminPage());
+      });
+    } else {
+      if (icon) icon.classList.remove('fa-spin');
+      ensureDatabase();
+      SSC_loadAdminPage(getCurrentActiveAdminPage());
+    }
+  }
 
   window.refreshAdminData = function() {
     var icon = document.getElementById('admin-sync-icon');
     if (icon) icon.classList.add('fa-spin');
     if (window.SSC && typeof SSC.callGAS === 'function') {
       SSC.callGAS("syncAll").then(function(res) {
-        if (icon) icon.classList.remove('fa-spin');
         if (res && res.status === "success" && res.data) {
+          if (icon) icon.classList.remove('fa-spin');
           if (Array.isArray(res.data.submissions)) db.submissions = res.data.submissions;
           if (Array.isArray(res.data.activity_logs)) db.activity_logs = res.data.activity_logs;
           if (Array.isArray(res.data.students)) db.students = res.data.students;
@@ -279,11 +547,11 @@
           persistDatabase();
           SSC_loadAdminPage(getCurrentActiveAdminPage());
           if (window.SSC && SSC.showToast) SSC.showToast('Data berhasil disinkronkan dengan Google Sheets!', 'success');
+        } else {
+          tryFallbackGetAllSubmissions(icon);
         }
       }).catch(function(e) {
-        if (icon) icon.classList.remove('fa-spin');
-        ensureDatabase();
-        SSC_loadAdminPage(getCurrentActiveAdminPage());
+        tryFallbackGetAllSubmissions(icon);
       });
     } else {
       setTimeout(function(){
@@ -351,8 +619,24 @@
           if (Array.isArray(res.data.students)) db.students = res.data.students;
           persistDatabase();
           SSC_loadAdminPage(getCurrentActiveAdminPage());
+        } else {
+          SSC.callGAS("getAllSubmissions").then(function(subRes) {
+            if (subRes && subRes.status === "success" && Array.isArray(subRes.data)) {
+              db.submissions = subRes.data;
+              persistDatabase();
+              SSC_loadAdminPage(getCurrentActiveAdminPage());
+            }
+          }).catch(function(){});
         }
-      }).catch(function(e){ console.info("Local mode active for admin:", e); });
+      }).catch(function(e){
+        SSC.callGAS("getAllSubmissions").then(function(subRes) {
+          if (subRes && subRes.status === "success" && Array.isArray(subRes.data)) {
+            db.submissions = subRes.data;
+            persistDatabase();
+            SSC_loadAdminPage(getCurrentActiveAdminPage());
+          }
+        }).catch(function(){});
+      });
     }
   };
 
@@ -410,7 +694,7 @@
     var sub = subs.find(function(s){ return (s.submission_id===id || s.request_id===id); });
     if(sub){
       sub.status = next;
-      sub.updated_at = new Date().toISOString().replace('T',' ').substring(0,16);
+      sub.updated_at = getRealtimeWIBString();
 
       // Sinkronkan ke requests
       if (Array.isArray(db.requests)) {
@@ -462,7 +746,7 @@
     if(sub){
       sub.status = 'DITOLAK';
       sub.admin_note = note || 'Ditolak';
-      sub.updated_at = new Date().toISOString().replace('T',' ').substring(0,16);
+      sub.updated_at = getRealtimeWIBString();
 
       if (Array.isArray(db.requests)) {
         var r = db.requests.find(function(x){ return x.submission_id===id || x.request_id===id; });
@@ -507,7 +791,7 @@
     sub.status = 'SELESAI';
     sub.document_url = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
     sub.admin_note = 'Dokumen resmi telah disahkan dan ditandatangani digital.';
-    sub.updated_at = new Date().toISOString().replace('T',' ').substring(0,16);
+    sub.updated_at = getRealtimeWIBString();
 
     if (Array.isArray(db.requests)) {
       var r = db.requests.find(function(x){ return x.submission_id===id || x.request_id===id; });
@@ -579,14 +863,12 @@
     return '<div class="table-responsive"><table class="table table-hover mb-0"><thead class="table-light"><tr><th>No. Tiket</th><th>Nama Siswa</th><th>Jenis Layanan</th><th>Tanggal</th><th>Berkas Lampiran</th><th>Status</th><th>Tindakan Staf TU</th></tr></thead><tbody>'+
       subs.map(function(s){
         var id = s.submission_id || s.request_id;
-        var attachBtn = s.attachment_url ?
-          '<button class="btn btn-sm btn-outline-info py-1 px-2 text-nowrap" style="font-size:.78rem;" onclick="previewDocModal(\''+encodeURIComponent(s.attachment_url)+'\', \''+encodeURIComponent((s.student_name||'Siswa')+' - '+(s.service_name||'Berkas')+' ('+id+')')+'\')"><i class="fa-solid fa-paperclip me-1"></i> Buka Berkas</button>' :
-          '<span class="text-muted small">Tanpa Berkas</span>';
+        var attachBtn = renderAttachmentButton(s.attachment_url, s.attachment_name, id, s.student_name);
 
         return '<tr><td><code style="color:var(--purple);font-weight:700;font-size:.82rem;">'+id+'</code></td>'+
           '<td class="small"><strong>'+(s.student_name||'Siswa')+'</strong><br><span style="color:var(--ink-500);font-size:.72rem;">'+(s.student_class||s.class||'XII RPL')+'</span></td>'+
           '<td class="small fw-semibold" style="max-width:180px;">'+s.service_name+'</td>'+
-          '<td class="small text-nowrap" style="color:var(--ink-500);">'+String(s.submission_date||s.submit_date||'').split(' ')[0]+'</td>'+
+          '<td class="small text-nowrap">'+formatTanggalTable(s.submission_date||s.submit_date)+'</td>'+
           '<td>'+attachBtn+'</td>'+
           '<td><span class="status-badge text-nowrap '+safeBadgeClass(s.status)+'">'+s.status+'</span></td>'+
           '<td style="min-width:180px;"><div class="d-flex flex-wrap gap-1 align-items-center">'+actionButtons(s)+'</div></td></tr>';

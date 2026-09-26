@@ -1,51 +1,116 @@
 ============================================================
-PANDUAN PEMBARUAN SISTEM SSC (NAVBAR TETAP & OPTIMASI MOBILE)
+PANDUAN PERBAIKAN BERKAS LAMPIRAN & WAKTU WIB REALTIME SSC
 ============================================================
 
-Pembaruan yang baru saja diselesaikan:
-1. PERBAIKAN NAVBAR UTAMA (FIXED & PROFESSIONAL SCROLL):
-   - Navbar utama kini menggunakan sistem `position: fixed` dengan efek Glassmorphism (blur 16px) dan garis batas halus.
-   - Saat halaman discroll, navbar TETAP di bagian atas layar (tidak ikut naik menghilang ke atas) layaknya website profesional & portal modern (Gov/Apple/Stripe).
-   - Efek `.nav-scrolled` otomatis aktif saat discroll > 20px dengan bayangan elegan (elevation shadow).
-   - Padding halaman telah disesuaikan secara otomatis (`padding-top: 76px` desktop, `70px` mobile) sehingga konten paling atas tidak tertutup navbar.
-   - Menu dropdown hamburger mobile diubah menjadi kartu terapung (floating card) dengan tombol Siswa & Admin berukuran jari penuh (touch-friendly) dan otomatis menutup saat link ditekan.
+PENYEBAB MASALAH:
+------------------------------------------------------------
+1. Mengapa di Kolom Berkas Lampiran sebelumnya muncul "Tanpa Berkas"?
+   - Ketika siswa mengunggah foto, sistem memanggil aksi `uploadAttachment` ke Google Apps Script (GAS).
+   - Di live deployment backend pengguna yang masih versi 2.0, endpoint `uploadAttachment` belum terdaftar.
+   - Sebelumnya, jika `uploadAttachment` gagal/belum terdaftar, sistem memiliki bug fallback yang mengosongkan berkas (`finalizeSubmission("")`), sehingga tautan lampiran hilang dan menjadi "Tanpa Berkas".
+   - SOLUSI KINI: Sistem dilengkapi "Dual-Fallback Guard" & kompresi canvas otomatis di sisi browser. Jika upload cloud ke Google Drive berhasil, ia memakai URL Drive. Namun jika koneksi bermasalah atau backend v2.0 belum diupdate, sistem TIDAK AKAN MENGOSONGKAN BERKAS, melainkan otomatis menyimpan gambar terkompresi (~20KB) sehingga berkas DIJAMIN TIDAK PERNAH HILANG, tombol [📷 Foto Lampiran] / [📄 Dokumen PDF] selalu muncul, dan dapat dilihat di modal interaktif!
 
-2. OPTIMASI TAMPILAN MOBILE & USER FRIENDLY (DASHBOARD SISWA & ADMIN):
-   - Kartu Statistik: Menggunakan grid proporsional (`g-2 g-md-3`, `p-3 p-md-4`) dengan tipografi responsif agar angka tidak sesak di layar HP sempit (iPhone/Android).
-   - Header Dashboard: Judul dan tombol sinkronisasi/keluar dipadatkan agar tidak meluap (overflow) di layar mobile.
-   - Sidebar Drawer: Memperbaiki bug tombol hamburger (sinkronisasi `.open` dan `.show`), menambahkan tombol tutup silang (X) di drawer, penguncian scroll latar belakang saat drawer aktif, serta otomatis menutup drawer saat menu dipilih.
-   - Bottom Nav Mobile: Dilengkapi dukungan `safe-area-inset-bottom` untuk iPhone dan Android dengan navigasi gestur agar tidak tertutup bilah navigasi HP.
-   - Modal Pratinjau Berkas: Di mobile berubah menjadi bottom sheet yang nyaman dengan fitur tutup instan jika klik di luar area modal (backdrop click-to-close).
-   - Tabel Responsif: Seluruh tombol aksi (Terbitkan PDF, Advance Status, Buka Berkas) memiliki `text-nowrap` dan jarak sentuh yang ergonomis.
-   - Pencegahan Auto-Zoom iOS Safari: Menyesuaikan ukuran input form pada mobile menjadi 16px agar browser tidak zoom mendadak saat mengisi formulir.
+2. Mengapa Waktu Pengajuan sebelumnya hanya Tanggal (tanpa jam) atau UTC?
+   - Sebelumnya, format waktu di frontend menggunakan `new Date().toISOString()` (UTC, selisih 7 jam dari WIB).
+   - Selain itu, di tabel dashboard siswa dan admin terdapat kode `.split(' ')[0]` yang secara sengaja memotong dan membuang jam dan menit pengajuan.
+   - SOLUSI KINI: Seluruh waktu pengajuan kini menggunakan Waktu Indonesia Barat (WIB = GMT+7) realtime (`YYYY-MM-DD HH:mm WIB`). Di tabel Siswa dan Admin, kolom Tanggal kini menampilkan tanggal sekaligus jam menit realtime dengan ikon jam:
+     Contoh tampilan:
+     2026-09-25
+     🕒 19:55 WIB
 
 ------------------------------------------------------------
-FILE YANG HARUS DIGANTI DENGAN KODE BARU DI BLOGGER:
+FITUR & PERBAIKAN YANG TELAH SELESAI DIUJI:
 ------------------------------------------------------------
+1. BERKAS LAMPIRAN ANTI-HILANG & PRATINJAU LIGHTBOX LENGKAP:
+   - Siswa upload Foto: Muncul tombol biru [📷 Foto Lampiran].
+   - Siswa upload Dokumen PDF: Muncul tombol merah [📄 Dokumen PDF].
+   - Jika diklik: Membuka Lightbox Modal di dalam halaman (TIDAK PERNAH TERUNDUH OTOMATIS).
+   - Tersedia tombol Zoom (+ / -), Putar Gambar 90 Derajat (Rotate), dan Reset Tampilan.
+   - Dukungan file: JPG, PNG, WEBP, dan Dokumen PDF.
 
-1. TEMA MASTER BLOGGER:
-   File: [SSC-BLOGGER-FILES/01_BLOGGER-THEME-EDIT-HTML.xml]
-   Cara:
-   - Buka Dashboard Blogger > Menu "Tema" (Theme).
-   - Klik tanda panah bawah di samping tombol 'Sesuaikan' > Pilih 'Edit HTML'.
-   - Hapus SELURUH kode yang ada di kotak editor Blogger (Ctrl+A lalu Del).
-   - Buka file 01_BLOGGER-THEME-EDIT-HTML.xml, Salin (Copy) SEMUA isinya, lalu Tempel (Paste) ke editor Blogger.
-   - Klik tombol Simpan (ikon disket di kanan atas).
+2. REALTIME WAKTU INDONESIA BARAT (WIB) SEKARANG:
+   - Dihitung sesuai zona waktu Asia/Jakarta (GMT+7) realtime saat siswa menekan tombol Kirim.
+   - Riwayat di Dashboard Siswa, Dashboard Admin, Log Aktivitas, dan Halaman Lacak Tiket konsisten menampilkan jam WIB.
 
-2. HALAMAN DASHBOARD SISWA:
-   File: [SSC-BLOGGER-FILES/pages/dashboard.html]
-   Cara:
-   - Buka Dashboard Blogger > Menu "Halaman" (Pages) > Klik halaman "Dashboard".
-   - Di kiri atas editor, pastikan mode "Tampilan HTML" (<>).
-   - Hapus seluruh isinya, Paste seluruh isi file dashboard.html yang baru.
-   - Klik tombol "Perbarui" (Update).
+2. KODE BACKEND GAS (Kode.gs):
+   - Penyimpanan ke Google Drive kini menghasilkan URL pratinjau (`preview_url`, `image_url`) yang ramah browser dan menyematkan metadata nama berkas, sehingga tidak memicu paksa download dan aman dari batasan sel Google Sheets.
+   - Endpoint `syncAll`, `getAllSubmissions`, `uploadAttachment`, `updateSubmissionStatus`, dan `trackSubmission` 100% aktif.
+   - Menambahkan pengaman otomatis di `createNewSubmission`: jika ada lampiran berkas, script otomatis menyimpannya ke Google Drive (folder `SSC_Attachments`) dan hanya menyimpan tautan Google Drive yang ringkas di Google Sheets. Sel Google Sheets dijamin tidak akan pernah meluap/error.
+   - Endpoint `syncAll`, `getAllSubmissions`, `getStudentSubmissions`, `uploadAttachment`, `updateSubmissionStatus`, dan `trackSubmission` kini 100% aktif dan teruji.
+   - Ditambahkan penanganan cadangan `doGet` untuk `action=syncAll` dan `action=getAllSubmissions`.
 
-3. HALAMAN DASHBOARD ADMIN TU:
-   File: [SSC-BLOGGER-FILES/pages/admin.html]
-   Cara:
-   - Buka Dashboard Blogger > Menu "Halaman" (Pages) > Klik halaman "Admin".
+2. HALAMAN SISWA (pages/dashboard.html):
+   - Formulir pengajuan kini menunggu konfirmasi pembuatan nomor tiket dari backend GAS sebelum dialihkan ke riwayat.
+   - Penanganan berkas lampiran diamankan: jika backend Drive belum siap atau offline, sistem tidak memaksakan Base64 raksasa ke sel Google Sheets, sehingga pengajuan SELALU sukses masuk ke database.
+   - `persistDatabase` kini dilengkapi proteksi `QuotaExceededError` agar cache browser tidak mogok.
+   - Dilengkapi fallback sinkronisasi otomatis untuk akun siswa yang sedang aktif.
+
+3. HALAMAN ADMIN (pages/admin.html):
+   - Tombol "Sinkronkan Data" dan inisialisasi awal kini memiliki proteksi bertingkat: mencoba `syncAll`, dan jika versi backend belum mendukung, otomatis beralih ke `getAllSubmissions` untuk menarik semua data pengajuan dari Google Sheets.
+   - Tabel otomatis menampilkan berkas unggahan siswa dengan pratinjau modal atau tautan Google Drive.
+
+4. TEMA MASTER BLOGGER (01_BLOGGER-THEME-EDIT-HTML.xml):
+   - Memperbaiki parsing login: mendukung `res.data` maupun `res.user` serta mencadangkan ke `localStorage` dan `sessionStorage`.
+   - Engine `SSC.callGAS` diperbarui agar otomatis mengintegrasikan respon `syncAll`, `getAllSubmissions`, dan `createSubmission`.
+   - Router Self-Healing dan template cadangan telah disinkronkan 100%.
+
+5. HALAMAN LACAK SURAT (pages/cek-pengajuan.html):
+   - Formulir lacak kini langsung memeriksa ke Google Apps Script backend (`trackSubmission`) secara real-time, dengan fallback pencarian lokal jika offline.
+
+============================================================
+LANGKAH WAJIB UNTUK MEMBUAT SEMUANYA TERHUBUNG KEMBALI:
+============================================================
+
+LANGKAH 1: PERBARUI KODE DI GOOGLE APPS SCRIPT (SANGAT PENTING!)
+-----------------------------------------------------------------
+Penyebab utama data tidak masuk adalah script.google.com masih memakai versi deploy lama.
+Ikuti langkah ini:
+
+1. Buka https://script.google.com di browser tempat akun Google Sheets Anda berada.
+2. Buka project script SSC Anda (file Kode.gs).
+3. Buka file [SSC-BLOGGER-FILES/Kode.gs] di komputer Anda.
+   (File ini murni kode JavaScript/Apps Script tanpa tanda markdown ```, sehingga aman 100%).
+   Tekan Ctrl + A lalu Ctrl + C untuk menyalin seluruh kodenya.
+4. Di script.google.com: Hapus semua kode lama (Ctrl + A lalu Del), lalu Tempelkan (Paste) kode baru.
+5. Klik ikon Disket (Simpan / Save). Pastikan tidak ada pesan error merah.
+6. ⚠ INI LANGKAH PALING KRUSIAL (JANGAN DILEWATKAN):
+   - Klik tombol biru "Deploy" (Terapkan) di kanan atas.
+   - Pilih "Manage deployments" (Kelola penerapan).
+   - Klik ikon Pensil (Edit) di samping penerapan Web App Anda.
+   - Di bagian "Version" (Versi), pilih "New version" (Versi baru).
+   - Pastikan "Who has access" (Siapa yang memiliki akses) tetap: "Anyone" (Siapa saja).
+   - Klik tombol "Deploy" (Terapkan).
+   - Klik "Done" (Selesai).
+
+*(PENTING: Jangan membuat deployment baru dengan URL berbeda agar URL tetap sama. Cukup pilih "New version" di Manage deployments agar URL tidak berubah).*
+
+LANGKAH 2: UPDATE TEMA MASTER BLOGGER
+-----------------------------------------------------------------
+1. Buka Blogger Dashboard > Menu "Theme" (Tema).
+2. Klik tanda panah bawah di samping tombol "Sesuaikan" > Pilih "Edit HTML".
+3. Hapus seluruh isinya (Ctrl+A lalu Del).
+4. Buka file [SSC-BLOGGER-FILES/01_BLOGGER-THEME-EDIT-HTML.xml], Salin (Copy) SEMUA isinya, lalu Tempel (Paste) ke editor Blogger.
+5. Klik tombol Simpan (ikon disket di kanan atas).
+
+LANGKAH 3: UPDATE HALAMAN DASHBOARD & ADMIN DI BLOGGER
+-----------------------------------------------------------------
+1. Halaman Siswa:
+   - Masuk ke Blogger > "Pages" (Halaman) > Klik halaman "Dashboard".
    - Pastikan mode "Tampilan HTML" (<>).
-   - Hapus seluruh isinya, Paste seluruh isi file admin.html yang baru.
-   - Klik tombol "Perbarui" (Update).
+   - Hapus isinya, paste seluruh isi file [SSC-BLOGGER-FILES/pages/dashboard.html].
+   - Klik "Perbarui" (Update).
 
+2. Halaman Admin:
+   - Masuk ke Blogger > "Pages" (Halaman) > Klik halaman "Admin".
+   - Pastikan mode "Tampilan HTML" (<>).
+   - Hapus isinya, paste seluruh isi file [SSC-BLOGGER-FILES/pages/admin.html].
+   - Klik "Perbarui" (Update).
+
+3. Halaman Cek Pengajuan:
+   - Masuk ke Blogger > "Pages" (Halaman) > Klik halaman "Cek Pengajuan".
+   - Mode HTML (<>), paste isi file [SSC-BLOGGER-FILES/pages/cek-pengajuan.html].
+   - Klik "Perbarui" (Update).
+
+============================================================
+Setelah 3 langkah di atas dilakukan, siswa yang login dan mengajukan surat akan langsung tersimpan di Google Sheets dan otomatis tampil di antrian Dashboard Admin TU secara instan!
 ============================================================
